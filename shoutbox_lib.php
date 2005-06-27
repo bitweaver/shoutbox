@@ -1,5 +1,21 @@
 <?php
+/**
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.1.1.1.2.1 2005/06/27 15:56:43 lsces Exp $
+ *
+ * Copyright (c) 2004 bitweaver.org
+ * Copyright (c) 2003 tikwiki.org
+ * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
+ *
+ * $Id: shoutbox_lib.php,v 1.1.1.1.2.1 2005/06/27 15:56:43 lsces Exp $
+ * @package shoutbox
+ */
 
+/**
+ * @package shoutbox
+ * @subpackage ShoutBoxLib
+ */
 class ShoutboxLib extends BitBase {
 	function ShoutboxLib() {
 		BitBase::BitBase();
