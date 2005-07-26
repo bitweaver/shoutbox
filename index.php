@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.1 2005/06/19 05:04:52 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.1.1.1.2.1 2005/07/26 15:50:27 drewslater Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -27,7 +27,7 @@ if (isset($_REQUEST["remove"])) {
 } elseif (isset($_REQUEST["shoutbox_admin"])) {
 	$shoutbox_autolink = (isset($_REQUEST["shoutbox_autolink"])) ? 'y' : 'n';
 	$gBitSystem->storePreference('shoutbox_autolink',$shoutbox_autolink);
-	$smarty->assign('shoutbox_autolink',$shoutbox_autolink);
+	$gBitSmarty->assign('shoutbox_autolink',$shoutbox_autolink);
 }
 
 if (isset($_REQUEST["save"]) && ($gBitUser->hasPermission( 'bit_p_post_shoutbox' ))) {
@@ -44,38 +44,38 @@ if( !empty( $_REQUEST["shout_id"] ) ) {
 	if( !$shoutboxlib->verify( $_REQUEST ) ) {
 		$feedback['error'] = $shoutboxlib->mErrors['store'];
 	}
-	$smarty->assign( "shout_id", $_REQUEST["shout_id"] );
+	$gBitSmarty->assign( "shout_id", $_REQUEST["shout_id"] );
 }
 
 //$listHash = array( 'offset' => $offset, 'max_records' => $maxRecords, 'sort_mode' => $sort_mode, 'find' => $find );
 $channels = $shoutboxlib->getList( $_REQUEST );
-$smarty->assign_by_ref('offset', $_REQUEST['offset']);
-$smarty->assign('find', $_REQUEST['find']);
+$gBitSmarty->assign_by_ref('offset', $_REQUEST['offset']);
+$gBitSmarty->assign('find', $_REQUEST['find']);
 
 $cant_pages = ceil($channels["cant"] / $maxRecords);
-$smarty->assign_by_ref('cant_pages', $cant_pages);
-$smarty->assign('actual_page', 1 + ( $_REQUEST['offset'] / $_REQUEST['max_records']));
+$gBitSmarty->assign_by_ref('cant_pages', $cant_pages);
+$gBitSmarty->assign('actual_page', 1 + ( $_REQUEST['offset'] / $_REQUEST['max_records']));
 
 if($channels["cant"] > ( $_REQUEST['offset'] + $maxRecords)) {
-	$smarty->assign('next_offset',  $_REQUEST['offset'] + $_REQUEST['max_records']);
+	$gBitSmarty->assign('next_offset',  $_REQUEST['offset'] + $_REQUEST['max_records']);
 } else {
-	$smarty->assign('next_offset', -1);
+	$gBitSmarty->assign('next_offset', -1);
 }
 
 // If offset is > 0 then prev_offset
 if( !empty( $_REQUEST['offset'] ) ) {
-	$smarty->assign('prev_offset',  $_REQUEST['offset'] - $_REQUEST['max_records']);
+	$gBitSmarty->assign('prev_offset',  $_REQUEST['offset'] - $_REQUEST['max_records']);
 } else {
-	$smarty->assign('prev_offset', -1);
+	$gBitSmarty->assign('prev_offset', -1);
 }
 
 if( !empty( $_REQUEST['to_user_id'] ) ) {
-	$smarty->assign('toUserId', $_REQUEST['to_user_id'] );
+	$gBitSmarty->assign('toUserId', $_REQUEST['to_user_id'] );
 }
 
-$smarty->assign_by_ref('channels', $channels["data"]);
+$gBitSmarty->assign_by_ref('channels', $channels["data"]);
 
-$smarty->assign_by_ref( 'shout', $info );
+$gBitSmarty->assign_by_ref( 'shout', $info );
 /*
 if(isset($_REQUEST['page'])) {
 	$page = &$_REQUEST['page'];
@@ -83,7 +83,7 @@ if(isset($_REQUEST['page'])) {
 }
 */
 
-$smarty->assign('feedback', $feedback);
+$gBitSmarty->assign('feedback', $feedback);
 // Display the template
 $gBitSystem->display( 'bitpackage:shoutbox/shoutbox.tpl', tra('Shoutbox') );
 

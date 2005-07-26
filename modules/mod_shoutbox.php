@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.1.1.1.2.1 2005/06/27 15:56:42 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.1.1.1.2.2 2005/07/26 15:50:28 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_shoutbox.php,v 1.1.1.1.2.1 2005/06/27 15:56:42 lsces Exp $
+ * $Id: mod_shoutbox.php,v 1.1.1.1.2.2 2005/07/26 15:50:28 drewslater Exp $
  * @package shoutbox
  * @subpackage functions
  */
@@ -21,13 +21,13 @@ include_once( SHOUTBOX_PKG_PATH.'shoutbox_lib.php' );
 $gBitUser->hasPermission( 'bit_p_view_shoutbox' );
 if( $gQueryUser && $gQueryUser->isRegistered() ) {
 	$shoutUserId = $gQueryUser->mUserId;
-	$smarty->assign( 'moduleTitle', $gQueryUser->getDisplayName().'\'s '.tra( 'shoutbox' ) );
+	$gBitSmarty->assign( 'moduleTitle', $gQueryUser->getDisplayName().'\'s '.tra( 'shoutbox' ) );
 } else {
-	$smarty->assign( 'moduleTitle', tra( 'Shoutbox' ) );
+	$gBitSmarty->assign( 'moduleTitle', tra( 'Shoutbox' ) );
 	$shoutUserId = ROOT_USER_ID;
 }
 
-$smarty->assign( 'toUserId', $shoutUserId );
+$gBitSmarty->assign( 'toUserId', $shoutUserId );
 $feedback= NULL;
 
 if ($gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'bit_p_view_shoutbox' )) {
@@ -60,8 +60,8 @@ if ($gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'bit
 		$shout_father .= '?';
 	}
 
-	global $smarty;
-	$smarty->assign('shout_ownurl', $shout_father);
+	global $gBitSmarty;
+	$gBitSmarty->assign('shout_ownurl', $shout_father);
 	if (isset($_REQUEST["shout_remove"])) {
 		if( $shoutboxlib->expunge( $_REQUEST["shout_remove"] ) ) {
 			$feedback['success'] = tra( "Message removed" );
@@ -81,8 +81,8 @@ if ($gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'bit
 	}
 	$getList = array( 'max_records' => $module_rows, 'sort_mode' => 'shout_time_desc', 'to_user_id' => $shoutUserId );
 	$shout_msgs = $shoutboxlib->getList( $getList );
-	$smarty->assign('shout_msgs', $shout_msgs["data"]);
-	$smarty->assign('feedback', $feedback);
+	$gBitSmarty->assign('shout_msgs', $shout_msgs["data"]);
+	$gBitSmarty->assign('feedback', $feedback);
 }
 
 ?>
