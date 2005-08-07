@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.1 2005/06/19 05:04:52 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.1.1.1.2.1 2005/08/07 12:26:07 squareing Exp $ *}
 {strip}
 
 <div class="display shoutbox">
@@ -56,6 +56,8 @@
 			{/if}
 		{/jstabs}
 
+		{minifind}
+
 		<ul class="data">
 			{section name=user loop=$channels}
 				<li class="{cycle values="odd,even"} item">
@@ -73,8 +75,6 @@
 		</ul>
 
 		{pagination}
-
-		{minifind}
 	</div><!-- end .body -->
 </div><!-- end .shoutbox -->
 
