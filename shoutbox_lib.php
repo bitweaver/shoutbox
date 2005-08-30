@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.4 2005/08/07 17:46:42 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.5 2005/08/30 22:33:11 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.4 2005/08/07 17:46:42 squareing Exp $
+ * $Id: shoutbox_lib.php,v 1.5 2005/08/30 22:33:11 squareing Exp $
  * @package shoutbox
  */
 
@@ -116,7 +116,8 @@ class ShoutboxLib extends BitBase {
 
 	function store( $pParamHash ) {
 		if( $this->verify( $pParamHash ) ) {
-			$now = date("U");
+			global $gBitSystem;
+			$now = $gBitSystem->getUTCTime();
 			$shoutSum = md5( $pParamHash['shout_message'] );
 			if( !empty( $pParamHash['shout_id'] ) ) {
 				$userSql = '';
