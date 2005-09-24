@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.1.1.1.2.1 2005/08/07 12:26:07 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.1.1.1.2.2 2005/09/24 17:55:42 spiderr Exp $ *}
 {strip}
 
 <div class="display shoutbox">
@@ -43,8 +43,10 @@
 						<div class="row">
 							{formlabel label="Auto-link URLs" for="shoutbox_autolink"}
 							{forminput}
-								{html_checkboxes name="shoutbox_autolink" values="y" checked=$shoutbox_autolink labels=false id="shoutbox_autolink"}
 								{formhelp note="This will convert any posted URL into an easily readable and clickable link" page="Shoutbox"}
+								{html_radios name="shoutbox_autolink" values="m" checked=$shoutbox_autolink labels=false id="shoutbox_autolink"}{tr}URLs for this server only{/tr}<br/>
+								{html_radios name="shoutbox_autolink" values="y" checked=$shoutbox_autolink labels=false id="shoutbox_autolink"}{tr}URLs for any server on the internet{/tr}<br/>
+								{html_radios name="shoutbox_autolink" values="" checked=$shoutbox_autolink labels=false id="shoutbox_autolink"}{tr}None{/tr}<br/>
 							{/forminput}
 						</div>
 
@@ -61,7 +63,7 @@
 		<ul class="data">
 			{section name=user loop=$channels}
 				<li class="{cycle values="odd,even"} item">
-					<b>{displayname hash=`$channels[user]`}</b> {tr}at{/tr} {$channels[user].shout_time|bit_long_datetime}
+					{tr}To{/tr}: {displayname user_id=`$channels[user].to_user_id`} {tr}From{/tr}: {displayname hash=`$channels[user]`} {tr}at{/tr} {$channels[user].shout_time|bit_long_datetime}
 					{if $channels[user].is_editable}
 						&nbsp;&nbsp;{smartlink ititle="Edit" ibiticon="liberty/edit_small" offset=$offset shout_id=$channels[user].shout_id to_user_id=$toUserId}
 					{/if}
