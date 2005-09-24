@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.1.1.1.2.2 2005/09/24 17:55:42 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.1.1.1.2.3 2005/09/24 18:28:54 spiderr Exp $ *}
 {strip}
 
 <div class="display shoutbox">
@@ -43,10 +43,18 @@
 						<div class="row">
 							{formlabel label="Auto-link URLs" for="shoutbox_autolink"}
 							{forminput}
-								{formhelp note="This will convert any posted URL into an easily readable and clickable link" page="Shoutbox"}
 								{html_radios name="shoutbox_autolink" values="m" checked=$shoutbox_autolink labels=false id="shoutbox_autolink"}{tr}URLs for this server only{/tr}<br/>
 								{html_radios name="shoutbox_autolink" values="y" checked=$shoutbox_autolink labels=false id="shoutbox_autolink"}{tr}URLs for any server on the internet{/tr}<br/>
 								{html_radios name="shoutbox_autolink" values="" checked=$shoutbox_autolink labels=false id="shoutbox_autolink"}{tr}None{/tr}<br/>
+								{formhelp note="This will convert any posted URL into an easily readable and clickable link"}
+							{/forminput}
+						</div>
+						<div class="row">
+							{formlabel label="Email Settings" for="shoutbox_autolink"}
+							{forminput}
+								{html_checkboxes name="shoutbox_email_notice" values="y" checked=$gBitSystem->getPreference('shoutbox_email_notice') labels=false id="shoutbox_autolink"}{tr}Auto-email Shouts{/tr}<br/>
+								{formhelp note="This will privately email any new shoutbox posts to the user being shouted."}
+								{formhelp page="Shoutbox"}
 							{/forminput}
 						</div>
 
