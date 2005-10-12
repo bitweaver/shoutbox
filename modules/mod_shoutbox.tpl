@@ -1,10 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.2 2005/08/07 17:46:42 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.3 2005/10/12 15:13:55 spiderr Exp $ *}
 
 {strip}
 
 {if $gBitSystem->isPackageActive( 'shoutbox' ) and $gBitUser->hasPermission( 'bit_p_view_shoutbox' )}
 	{bitmodule title="$moduleTitle" name="shoutbox"}
-		{if $feedback}{formfeedback hash=$feedback}{/if}
+		{if $shoutFeedback}{formfeedback hash=$shoutFeedback}{/if}
 
 		{if $gBitUser->hasPermission( 'bit_p_post_shoutbox' )}
 			<form action="{$shout_ownurl}" method="post">

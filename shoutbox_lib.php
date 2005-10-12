@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.5 2005/08/30 22:33:11 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.6 2005/10/12 15:13:54 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.5 2005/08/30 22:33:11 squareing Exp $
+ * $Id: shoutbox_lib.php,v 1.6 2005/10/12 15:13:54 spiderr Exp $
  * @package shoutbox
  */
 
@@ -61,10 +61,15 @@ class ShoutboxLib extends BitBase {
 			$res["shout_message"] = htmlspecialchars($res["shout_message"]);
 
 			if( $gBitSystem->isFeatureActive( 'shoutbox_autolink' ) ) {
+				$hostname = '';
+				if( $gBitSystem->getPreference( 'shoutbox_autolink' ) == 'm' ) {
+					//moderated URL's
+					$hostname = $gBitSystem->getPreference( 'feature_server_name' ) ? $gBitSystem->getPreference( 'feature_server_name' ) : $_SERVER['HTTP_HOST'];
+				}
 				// we replace urls starting with http(s)|ftp(s) to active links
-				$res["shout_message"] = preg_replace("/((http|ftp)+(s)?:\/\/[^<>\s]+)/i", "<a href=\"\\0\">\\0</a>", $res["shout_message"]);
+				$res["shout_message"] = preg_replace("/((http|ftp)+(s)?:\/\/[^<>\s]*".$hostname."[^<>\s]*)/i", "<a href=\"\\0\">\\0</a>", $res["shout_message"]);
 				// we replace also urls starting with www. only to active links
-				$res["shout_message"] = preg_replace("/(?<!http|ftp)(?<!s)(?<!:\/\/)(www\.[^ )\s\r\n]+)/i","<a href=\"http://\\0\">\\0</a>",$res["shout_message"]);
+				$res["shout_message"] = preg_replace("/(?<!http|ftp)(?<!s)(?<!:\/\/)(www\.".$hostname."[^ )\s\r\n]*)/i","<a href=\"http://\\0\">\\0</a>",$res["shout_message"]);
 				// we replace also urls longer than 30 chars with translantable string as link description instead the URL itself to prevent breaking the layout in some browsers (e.g. Konqueror)
 				$res["shout_message"] = preg_replace("/(<a href=\")((http|ftp)+(s)?:\/\/[^\"]+)(\">)([^<]){30,}<\/a>/i", "<a href=\"\\2\">[".tra('Link')."]</a>", $res["shout_message"]);
 			}
@@ -94,7 +99,7 @@ class ShoutboxLib extends BitBase {
 			$pParamHash['to_user_id'] = ROOT_USER_ID;
 		}
 		if( !empty( $pParamHash['shout_message'] ) ) {
-			$pParamHash['shout_message'] = strip_tags( $pParamHash['shout_message'] );
+			$pParamHash['shout_message'] = substr( strip_tags( $pParamHash['shout_message'] ), 0, 255 );
 			$shout_sum = md5($pParamHash['shout_message']);
 			$cant = $this->mDb->getOne("SELECT `shout_id` from `".BIT_DB_PREFIX."tiki_shoutbox` WHERE `shout_sum`=? AND `shout_user_id`=? AND `to_user_id`=?", array( $shout_sum, $pParamHash['shout_user_id'], $pParamHash['to_user_id'] ) );
 			if ($cant) {
@@ -116,7 +121,7 @@ class ShoutboxLib extends BitBase {
 
 	function store( $pParamHash ) {
 		if( $this->verify( $pParamHash ) ) {
-			global $gBitSystem;
+			global $gBitSystem, $gBitSmarty;
 			$now = $gBitSystem->getUTCTime();
 			$shoutSum = md5( $pParamHash['shout_message'] );
 			if( !empty( $pParamHash['shout_id'] ) ) {
@@ -130,7 +135,22 @@ class ShoutboxLib extends BitBase {
 				$this->mDb->query($query,$bindvars);
 				$query = "insert into `".BIT_DB_PREFIX."tiki_shoutbox`( `shout_message`, `shout_user_id`, `to_user_id`, `shout_time`,`shout_sum`) values(?,?,?,?,?)";
 				$bindvars = array( $pParamHash['shout_message'], $pParamHash['shout_user_id'], $pParamHash['to_user_id'], (int)$now, $shoutSum );
+				if( $gBitSystem->isFeatureActive( 'shoutbox_email_notice' ) ) {
+					$gToUser = new BitPermUser( $pParamHash['to_user_id'] );
+					$gToUser->load();
+					$gFromUser = new BitPermUser( $pParamHash['shout_user_id'] );
+					$gFromUser->load();
+					$gBitSmarty->assign( 'sendShoutUser', $gFromUser->getDisplayName( TRUE ) );
+					$gBitSmarty->assign( 'sendShoutMessage', $pParamHash['shout_message'] );
+					$gBitSmarty->assign( 'sendShoutUri', $_SERVER['SCRIPT_URI'] );
+					$mail_data = $gBitSmarty->fetch('bitpackage:shoutbox/shoutbox_send_notice.tpl');
+					$headers  = 'MIME-Version: 1.0' . "\r\n";
+					$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+					$headers .= "From: ".$gBitSystem->getPreference( 'sender_email' )."\r\n";
+					mail($gToUser->mInfo['email'], tra('A new shoutbox message for you at'). ' ' . $_SERVER["SERVER_NAME"].' '.date( 'Y-m-d' ), $mail_data, $headers);
+				}
 			}
+
 			$result = $this->mDb->query($query,$bindvars);
 		}
 
