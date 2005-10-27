@@ -27,14 +27,14 @@ $gBitInstaller->registerPackageInfo( SHOUTBOX_PKG_NAME, array(
 
 // ### Default Preferences
 $gBitInstaller->registerPreferences( SHOUTBOX_PKG_NAME, array(
-	array('', 'shoutbox_autolink','n')
+	array(SHOUTBOX_PKG_NAME, 'shoutbox_autolink','n')
 ) );
 
 // ### Default UserPermissions
 $gBitInstaller->registerUserPermissions( SHOUTBOX_PKG_NAME, array(
-	array('bit_p_view_shoutbox', 'Can view shoutbox', 'basic', 'shoutbox'),
-	array('bit_p_admin_shoutbox', 'Can admin shoutbox (Edit/remove msgs)', 'editors', 'shoutbox'),
-	array('bit_p_post_shoutbox', 'Can post messages in shoutbox', 'basic', 'shoutbox')
+	array('bit_p_view_shoutbox', 'Can view shoutbox', 'basic', SHOUTBOX_PKG_NAME),
+	array('bit_p_admin_shoutbox', 'Can admin shoutbox (Edit/remove msgs)', 'editors', SHOUTBOX_PKG_NAME),
+	array('bit_p_post_shoutbox', 'Can post messages in shoutbox', 'basic', SHOUTBOX_PKG_NAME)
 ) );
 
 ?>
