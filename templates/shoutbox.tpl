@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.3 2005/10/12 15:13:55 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.4 2006/01/26 14:57:45 squareing Exp $ *}
 {strip}
 
 <div class="display shoutbox">
@@ -71,7 +71,7 @@
 		<ul class="data">
 			{section name=user loop=$channels}
 				<li class="{cycle values="odd,even"} item">
-					{tr}To{/tr}: {displayname user_id=`$channels[user].to_user_id`} {tr}From{/tr}: {displayname hash=`$channels[user]`} {tr}at{/tr} {$channels[user].shout_time|bit_long_datetime}
+					{tr}To{/tr}: {displayname user_id=`$channels[user].to_user_id`} {tr}From{/tr}: {displayname hash=`$channels[user]`}, {$channels[user].shout_time|bit_long_datetime}
 					{if $channels[user].is_editable}
 						&nbsp;&nbsp;{smartlink ititle="Edit" ibiticon="liberty/edit_small" offset=$offset shout_id=$channels[user].shout_id to_user_id=$toUserId}
 					{/if}
