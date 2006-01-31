@@ -1,7 +1,7 @@
 <?php
 
 $tables = array( 
-'tiki_shoutbox' => "
+'shoutbox' => "
   shout_id I4 AUTO NOTNULL PRIMARY,
   shout_user_id I4 NOTNULL,
   to_user_id I4 NOTNULL,

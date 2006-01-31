@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.6 2005/10/12 15:13:54 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.7 2006/01/31 20:20:15 bitweaver Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.6 2005/10/12 15:13:54 spiderr Exp $
+ * $Id: shoutbox_lib.php,v 1.7 2006/01/31 20:20:15 bitweaver Exp $
  * @package shoutbox
  */
 
@@ -47,8 +47,8 @@ class ShoutboxLib extends BitBase {
 			array_push( $bindvars, $pListHash['to_user_id'] );
 		}
 
-		$query = "SELECT * FROM `".BIT_DB_PREFIX."tiki_shoutbox` sh INNER JOIN `".BIT_DB_PREFIX."users_users` uus ON (sh.`shout_user_id`=uus.`user_id`) $mid order by ".$this->mDb->convert_sortmode( $pListHash['sort_mode'] );
-		$query_cant = "select count(*) from `".BIT_DB_PREFIX."tiki_shoutbox` $mid";
+		$query = "SELECT * FROM `".BIT_DB_PREFIX."shoutbox` sh INNER JOIN `".BIT_DB_PREFIX."users_users` uus ON (sh.`shout_user_id`=uus.`user_id`) $mid order by ".$this->mDb->convert_sortmode( $pListHash['sort_mode'] );
+		$query_cant = "select count(*) from `".BIT_DB_PREFIX."shoutbox` $mid";
 		$result = $this->mDb->query($query,$bindvars,$pListHash['max_records'],$pListHash['offset']);
 		$cant = $this->mDb->getOne($query_cant,$bindvars);
 		$ret = array();
@@ -101,7 +101,7 @@ class ShoutboxLib extends BitBase {
 		if( !empty( $pParamHash['shout_message'] ) ) {
 			$pParamHash['shout_message'] = substr( strip_tags( $pParamHash['shout_message'] ), 0, 255 );
 			$shout_sum = md5($pParamHash['shout_message']);
-			$cant = $this->mDb->getOne("SELECT `shout_id` from `".BIT_DB_PREFIX."tiki_shoutbox` WHERE `shout_sum`=? AND `shout_user_id`=? AND `to_user_id`=?", array( $shout_sum, $pParamHash['shout_user_id'], $pParamHash['to_user_id'] ) );
+			$cant = $this->mDb->getOne("SELECT `shout_id` from `".BIT_DB_PREFIX."shoutbox` WHERE `shout_sum`=? AND `shout_user_id`=? AND `to_user_id`=?", array( $shout_sum, $pParamHash['shout_user_id'], $pParamHash['to_user_id'] ) );
 			if ($cant) {
 				$this->mErrors['store'] = tra( 'Duplicate message' );
 			}
@@ -110,7 +110,7 @@ class ShoutboxLib extends BitBase {
 		if( !empty( $pParamHash['shout_id'] ) ) {
 			// we are editing an existing shout, let's make sure we have permission
 			if( !$gBitUser->hasPermission( 'bit_p_admin_shoutbox' ) ) {
-				$shout = $this->mDb->getRow( "SELECT * FROM `".BIT_DB_PREFIX."tiki_shoutbox` WHERE `shout_id`=?", array( $pParamHash['shout_id']));
+				$shout = $this->mDb->getRow( "SELECT * FROM `".BIT_DB_PREFIX."shoutbox` WHERE `shout_id`=?", array( $pParamHash['shout_id']));
 				if( !$gBitUser->isRegistered() || (!empty( $shout ) && $shout['shout_user_id'] != $gBitUser->getUserId()) ) {
 					$this->mErrors['store'] = tra( 'You do not have permission to edit the message' );
 				}
@@ -127,13 +127,13 @@ class ShoutboxLib extends BitBase {
 			if( !empty( $pParamHash['shout_id'] ) ) {
 				$userSql = '';
 				$bindvars = array( $pParamHash['shout_message'], $shoutSum, (int)$pParamHash['shout_id'] );
-				$query = "UPDATE `".BIT_DB_PREFIX."tiki_shoutbox` SET `shout_message`=?, `shout_sum`=?
+				$query = "UPDATE `".BIT_DB_PREFIX."shoutbox` SET `shout_message`=?, `shout_sum`=?
 						  WHERE `shout_id`=? $userSql";
 			} else {
-				$query = "delete from `".BIT_DB_PREFIX."tiki_shoutbox` where `shout_user_id`=? and `shout_time`=? and `shout_sum`=?";
+				$query = "delete from `".BIT_DB_PREFIX."shoutbox` where `shout_user_id`=? and `shout_time`=? and `shout_sum`=?";
 				$bindvars = array( $pParamHash['shout_user_id'], (int)$now, $shoutSum );
 				$this->mDb->query($query,$bindvars);
-				$query = "insert into `".BIT_DB_PREFIX."tiki_shoutbox`( `shout_message`, `shout_user_id`, `to_user_id`, `shout_time`,`shout_sum`) values(?,?,?,?,?)";
+				$query = "insert into `".BIT_DB_PREFIX."shoutbox`( `shout_message`, `shout_user_id`, `to_user_id`, `shout_time`,`shout_sum`) values(?,?,?,?,?)";
 				$bindvars = array( $pParamHash['shout_message'], $pParamHash['shout_user_id'], $pParamHash['to_user_id'], (int)$now, $shoutSum );
 				if( $gBitSystem->isFeatureActive( 'shoutbox_email_notice' ) ) {
 					$gToUser = new BitPermUser( $pParamHash['to_user_id'] );
@@ -161,7 +161,7 @@ class ShoutboxLib extends BitBase {
 		global $gBitUser;
 		$hasPerm = $gBitUser->hasPermission( 'bit_p_admin_shoutbox' );
 		if( !$hasPerm && $gBitUser->isRegistered() ) {
-			$shout = $this->mDb->getRow( 'SELECT * FROM `'.BIT_DB_PREFIX.'tiki_shoutbox` WHERE `shout_id`=?', array($pShoutId) );
+			$shout = $this->mDb->getRow( 'SELECT * FROM `'.BIT_DB_PREFIX.'shoutbox` WHERE `shout_id`=?', array($pShoutId) );
 			if( $shout ) {
 				$hasPerm = ($shout['to_user_id'] == $gBitUser->mUserId) || ($shout['shout_user_id'] == $gBitUser->mUserId);
 			} else {
@@ -169,7 +169,7 @@ class ShoutboxLib extends BitBase {
 			}
 		}
 		if( $hasPerm ) {
-			$query = "DELETE FROM `".BIT_DB_PREFIX."tiki_shoutbox` where `shout_id`=?";
+			$query = "DELETE FROM `".BIT_DB_PREFIX."shoutbox` where `shout_id`=?";
 			$result = $this->mDb->query($query,array((int)$pShoutId));
 		} elseif( empty( $this->mErrors['expunge'] ) ) {
 			$this->mErrors['expunge'] = tra( 'You do not have permission to delete the message' );
@@ -178,7 +178,7 @@ class ShoutboxLib extends BitBase {
 	}
 
 	function get_shoutbox($pShoutId) {
-		$query = "select * from `".BIT_DB_PREFIX."tiki_shoutbox` where `shout_id`=?";
+		$query = "select * from `".BIT_DB_PREFIX."shoutbox` where `shout_id`=?";
 		$result = $this->mDb->query($query,array((int)$pShoutId));
 		if (!$result->numRows()) {
 			return false;
