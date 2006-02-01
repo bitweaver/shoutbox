@@ -1,14 +1,15 @@
 <?php
 
 $tables = array( 
-'shoutbox' => "
-  shout_id I4 AUTO NOTNULL PRIMARY,
-  shout_user_id I4 NOTNULL,
-  to_user_id I4 NOTNULL,
-  shout_message C(255) NOTNULL,
-  shout_time I8 NOTNULL,
-  shout_sum C(32)
-" );
+	'shoutbox' => "
+		shout_id I4 AUTO NOTNULL PRIMARY,
+		shout_user_id I4 NOTNULL,
+		to_user_id I4 NOTNULL,
+		shout_message C(255) NOTNULL,
+		shout_time I8 NOTNULL,
+		shout_sum C(32)
+	"
+);
 
 global $gBitInstaller;
 

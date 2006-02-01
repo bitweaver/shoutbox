@@ -39,7 +39,18 @@ array( 'DATADICT' => array(
 )),
 
 	)
-)
+),
+
+	'BWR1' => array(
+		'BWR2' => array(
+// de-tikify tables
+array( 'DATADICT' => array(
+	array( 'RENAMETABLE' => array(
+		'tiki_shoutbox' => 'shoutbox',
+	)),
+)),
+		)
+	),
 
 );
 
