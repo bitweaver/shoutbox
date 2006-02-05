@@ -20,9 +20,6 @@ foreach( array_keys( $tables ) AS $tableName ) {
 $gBitInstaller->registerPackageInfo( SHOUTBOX_PKG_NAME, array(
 	'description' => "The shoutbox is a module that resides in one of the side-columns and allows users to chat with each other, ask questions or post some random comments.",
 	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
-	'version' => '0.1',
-	'state' => 'beta',
-	'dependencies' => '',
 ) );
 
 // ### Default Preferences
