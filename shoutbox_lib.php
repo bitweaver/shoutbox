@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.7 2006/01/31 20:20:15 bitweaver Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.8 2006/02/06 00:11:00 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.7 2006/01/31 20:20:15 bitweaver Exp $
+ * $Id: shoutbox_lib.php,v 1.8 2006/02/06 00:11:00 squareing Exp $
  * @package shoutbox
  */
 
@@ -21,7 +21,7 @@ class ShoutboxLib extends BitBase {
 		BitBase::BitBase();
 	}
 
-	// $offset, $maxRecords, $sort_mode, $find
+	// $offset, $max_records, $sort_mode, $find
 	function getList( &$pListHash ) {
 		global $gBitUser, $gBitSystem;
 		if ( empty( $_REQUEST["sort_mode"] ) ) {

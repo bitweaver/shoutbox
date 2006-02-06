@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.3 2005/10/12 15:13:54 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.4 2006/02/06 00:11:00 squareing Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -48,16 +48,16 @@ if( !empty( $_REQUEST["shout_id"] ) ) {
 	$gBitSmarty->assign( "shout_id", $_REQUEST["shout_id"] );
 }
 
-//$listHash = array( 'offset' => $offset, 'max_records' => $maxRecords, 'sort_mode' => $sort_mode, 'find' => $find );
+//$listHash = array( 'offset' => $offset, 'max_records' => $max_records, 'sort_mode' => $sort_mode, 'find' => $find );
 $channels = $shoutboxlib->getList( $_REQUEST );
 $gBitSmarty->assign_by_ref('offset', $_REQUEST['offset']);
 $gBitSmarty->assign('find', $_REQUEST['find']);
 
-$cant_pages = ceil($channels["cant"] / $maxRecords);
+$cant_pages = ceil($channels["cant"] / $max_records);
 $gBitSmarty->assign_by_ref('cant_pages', $cant_pages);
 $gBitSmarty->assign('actual_page', 1 + ( $_REQUEST['offset'] / $_REQUEST['max_records']));
 
-if($channels["cant"] > ( $_REQUEST['offset'] + $maxRecords)) {
+if($channels["cant"] > ( $_REQUEST['offset'] + $max_records)) {
 	$gBitSmarty->assign('next_offset',  $_REQUEST['offset'] + $_REQUEST['max_records']);
 } else {
 	$gBitSmarty->assign('next_offset', -1);
