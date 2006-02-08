@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.4 2006/02/06 00:11:00 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.5 2006/02/08 21:51:15 squareing Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -26,8 +26,8 @@ if (isset($_REQUEST["remove"])) {
 	}
 } elseif (isset($_REQUEST["shoutbox_admin"])) {
 	$shoutbox_autolink = (isset($_REQUEST["shoutbox_autolink"])) ? $_REQUEST["shoutbox_autolink"] : NULL;
-	$gBitSystem->storePreference('shoutbox_autolink',$shoutbox_autolink);
-	$gBitSystem->storePreference( 'shoutbox_email_notice', (isset($_REQUEST["shoutbox_email_notice"][0])) ? $_REQUEST["shoutbox_email_notice"][0] : NULL );
+	$gBitSystem->storePreference( 'shoutbox_autolink', $shoutbox_autolink, SHOUTBOX_PKG_NAME );
+	$gBitSystem->storePreference( 'shoutbox_email_notice', (isset($_REQUEST["shoutbox_email_notice"][0])) ? $_REQUEST["shoutbox_email_notice"][0] : NULL, SHOUTBOX_PKG_NAME );
 	$gBitSmarty->assign('shoutbox_autolink',$shoutbox_autolink);
 }
 
