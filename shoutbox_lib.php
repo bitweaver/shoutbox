@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.8 2006/02/06 00:11:00 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.9 2006/02/13 10:06:19 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.8 2006/02/06 00:11:00 squareing Exp $
+ * $Id: shoutbox_lib.php,v 1.9 2006/02/13 10:06:19 squareing Exp $
  * @package shoutbox
  */
 
@@ -64,7 +64,7 @@ class ShoutboxLib extends BitBase {
 				$hostname = '';
 				if( $gBitSystem->getPreference( 'shoutbox_autolink' ) == 'm' ) {
 					//moderated URL's
-					$hostname = $gBitSystem->getPreference( 'feature_server_name' ) ? $gBitSystem->getPreference( 'feature_server_name' ) : $_SERVER['HTTP_HOST'];
+					$hostname = $gBitSystem->getPreference( 'kernel_server_name' ) ? $gBitSystem->getPreference( 'kernel_server_name' ) : $_SERVER['HTTP_HOST'];
 				}
 				// we replace urls starting with http(s)|ftp(s) to active links
 				$res["shout_message"] = preg_replace("/((http|ftp)+(s)?:\/\/[^<>\s]*".$hostname."[^<>\s]*)/i", "<a href=\"\\0\">\\0</a>", $res["shout_message"]);
