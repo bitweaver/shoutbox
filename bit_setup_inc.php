@@ -1,9 +1,9 @@
 <?php
-	global $gBitSystem, $gBitUser;
-	
-	$gBitSystem->registerPackage( 'shoutbox', dirname( __FILE__ ).'/' );
+global $gBitSystem, $gBitUser;
 
-	if( $gBitSystem->isPackageActive( 'shoutbox' ) ) {
-		
-	}
+$registerHash = array(
+	'package_name' => 'shoutbox',
+	'package_path' => dirname( __FILE__ ).'/',
+);
+$gBitSystem->registerPackage( $registerHash );
 ?>
