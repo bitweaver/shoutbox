@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.9 2006/02/13 10:06:19 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.10 2006/03/01 20:16:30 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.9 2006/02/13 10:06:19 squareing Exp $
+ * $Id: shoutbox_lib.php,v 1.10 2006/03/01 20:16:30 spiderr Exp $
  * @package shoutbox
  */
 
@@ -62,9 +62,9 @@ class ShoutboxLib extends BitBase {
 
 			if( $gBitSystem->isFeatureActive( 'shoutbox_autolink' ) ) {
 				$hostname = '';
-				if( $gBitSystem->getPreference( 'shoutbox_autolink' ) == 'm' ) {
+				if( $gBitSystem->getConfig( 'shoutbox_autolink' ) == 'm' ) {
 					//moderated URL's
-					$hostname = $gBitSystem->getPreference( 'kernel_server_name' ) ? $gBitSystem->getPreference( 'kernel_server_name' ) : $_SERVER['HTTP_HOST'];
+					$hostname = $gBitSystem->getConfig( 'kernel_server_name' ) ? $gBitSystem->getConfig( 'kernel_server_name' ) : $_SERVER['HTTP_HOST'];
 				}
 				// we replace urls starting with http(s)|ftp(s) to active links
 				$res["shout_message"] = preg_replace("/((http|ftp)+(s)?:\/\/[^<>\s]*".$hostname."[^<>\s]*)/i", "<a href=\"\\0\">\\0</a>", $res["shout_message"]);
@@ -146,7 +146,7 @@ class ShoutboxLib extends BitBase {
 					$mail_data = $gBitSmarty->fetch('bitpackage:shoutbox/shoutbox_send_notice.tpl');
 					$headers  = 'MIME-Version: 1.0' . "\r\n";
 					$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-					$headers .= "From: ".$gBitSystem->getPreference( 'sender_email' )."\r\n";
+					$headers .= "From: ".$gBitSystem->getConfig( 'sender_email' )."\r\n";
 					mail($gToUser->mInfo['email'], tra('A new shoutbox message for you at'). ' ' . $_SERVER["SERVER_NAME"].' '.date( 'Y-m-d' ), $mail_data, $headers);
 				}
 			}

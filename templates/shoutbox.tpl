@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.4 2006/01/26 14:57:45 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.5 2006/03/01 20:16:30 spiderr Exp $ *}
 {strip}
 
 <div class="display shoutbox">
@@ -52,7 +52,7 @@
 						<div class="row">
 							{formlabel label="Email Settings" for="shoutbox_autolink"}
 							{forminput}
-								{html_checkboxes name="shoutbox_email_notice" values="y" checked=$gBitSystem->getPreference('shoutbox_email_notice') labels=false id="shoutbox_autolink"}{tr}Auto-email Shouts{/tr}<br/>
+								{html_checkboxes name="shoutbox_email_notice" values="y" checked=$gBitSystem->getConfig('shoutbox_email_notice') labels=false id="shoutbox_autolink"}{tr}Auto-email Shouts{/tr}<br/>
 								{formhelp note="This will privately email any new shoutbox posts to the user being shouted."}
 								{formhelp page="Shoutbox"}
 							{/forminput}
