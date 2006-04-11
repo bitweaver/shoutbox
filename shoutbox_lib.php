@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.11 2006/03/19 16:21:49 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.12 2006/04/11 13:08:55 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.11 2006/03/19 16:21:49 spiderr Exp $
+ * $Id: shoutbox_lib.php,v 1.12 2006/04/11 13:08:55 squareing Exp $
  * @package shoutbox
  */
 
@@ -78,8 +78,8 @@ class ShoutboxLib extends BitBase {
 			$res["shout_message"] = preg_replace('/(\s*)([^>]+)(<|$)/e', "'\\1'.str_replace(';', ';<span></span>','\\2').'\\3'", $res["shout_message"]);
 			// if not in tag or on a space or doesn't contain a html entity we split all plain text strings longer than 25 chars using the empty span tag again
 			$wrap_at = 25;
-			$res['is_editable'] = $gBitUser->isRegistered() && ($gBitUser->hasPermission( 'bit_p_admin_shoutbox' ) || $gBitUser->getUserId() == $res['shout_user_id'] );
-			$res['is_deletable'] = $gBitUser->isRegistered() && ($gBitUser->hasPermission( 'bit_p_admin_shoutbox' ) || $gBitUser->getUserId() == $res['shout_user_id'] || $gBitUser->getUserId() == $res['to_user_id'] );
+			$res['is_editable'] = $gBitUser->isRegistered() && ($gBitUser->hasPermission( 'p_shoutbox_admin' ) || $gBitUser->getUserId() == $res['shout_user_id'] );
+			$res['is_deletable'] = $gBitUser->isRegistered() && ($gBitUser->hasPermission( 'p_shoutbox_admin' ) || $gBitUser->getUserId() == $res['shout_user_id'] || $gBitUser->getUserId() == $res['to_user_id'] );
 			$res["shout_message"] = preg_replace('/(\s*)([^\;>\s]{'.$wrap_at.',})([^&]<|$)/e', "'\\1'.wordwrap('\\2', '".$wrap_at."', '<span></span>', 1).'\\3'", $res["shout_message"]);
 
 			$ret[] = $res;
@@ -111,7 +111,7 @@ class ShoutboxLib extends BitBase {
 
 		if( !empty( $pParamHash['shout_id'] ) ) {
 			// we are editing an existing shout, let's make sure we have permission
-			if( !$gBitUser->hasPermission( 'bit_p_admin_shoutbox' ) ) {
+			if( !$gBitUser->hasPermission( 'p_shoutbox_admin' ) ) {
 				$shout = $this->mDb->getRow( "SELECT * FROM `".BIT_DB_PREFIX."shoutbox` WHERE `shout_id`=?", array( $pParamHash['shout_id']));
 				if( !$gBitUser->isRegistered() || (!empty( $shout ) && $shout['shout_user_id'] != $gBitUser->getUserId()) ) {
 					$this->mErrors['store'] = tra( 'You do not have permission to edit the message' );
@@ -161,7 +161,7 @@ class ShoutboxLib extends BitBase {
 
 	function expunge( $pShoutId ) {
 		global $gBitUser;
-		$hasPerm = $gBitUser->hasPermission( 'bit_p_admin_shoutbox' );
+		$hasPerm = $gBitUser->hasPermission( 'p_shoutbox_admin' );
 		if( !$hasPerm && $gBitUser->isRegistered() ) {
 			$shout = $this->mDb->getRow( 'SELECT * FROM `'.BIT_DB_PREFIX.'shoutbox` WHERE `shout_id`=?', array($pShoutId) );
 			if( $shout ) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.4 2005/10/12 15:13:55 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.5 2006/04/11 13:08:55 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_shoutbox.php,v 1.4 2005/10/12 15:13:55 spiderr Exp $
+ * $Id: mod_shoutbox.php,v 1.5 2006/04/11 13:08:55 squareing Exp $
  * @package shoutbox
  * @subpackage functions
  */
@@ -18,7 +18,7 @@ global $shoutboxlib, $gQueryUser;
  * required setup
  */
 include_once( SHOUTBOX_PKG_PATH.'shoutbox_lib.php' );
-$gBitUser->hasPermission( 'bit_p_view_shoutbox' );
+$gBitUser->hasPermission( 'p_shoutbox_view' );
 if( $gQueryUser && $gQueryUser->isRegistered() ) {
 	$shoutUserId = $gQueryUser->mUserId;
 	$gBitSmarty->assign( 'moduleTitle', $gQueryUser->getDisplayName().'\'s '.tra( 'shoutbox' ) );
@@ -30,7 +30,7 @@ if( $gQueryUser && $gQueryUser->isRegistered() ) {
 $gBitSmarty->assign( 'toUserId', $shoutUserId );
 $shoutFeedback= NULL;
 
-if ($gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'bit_p_view_shoutbox' )) {
+if ($gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'p_shoutbox_view' )) {
 	$setup_parsed_uri = parse_url($_SERVER["REQUEST_URI"]);
 
 	if (isset($setup_parsed_uri["query"])) {
@@ -70,7 +70,7 @@ if ($gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'bit
 		}
 	}
 
-	if ($gBitUser->hasPermission( 'bit_p_post_shoutbox' )) {
+	if ($gBitUser->hasPermission( 'p_shoutbox_post' )) {
 		if (isset($_REQUEST["shout_send"])) {
 			if( $shoutboxlib->store( $_REQUEST ) ) {
 				$shoutFeedback['success'] = tra( "Message posted" );

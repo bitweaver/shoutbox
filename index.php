@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.6 2006/03/01 20:16:30 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.7 2006/04/11 13:08:55 squareing Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -12,7 +12,7 @@ require_once( '../bit_setup_inc.php' );
 include_once( SHOUTBOX_PKG_PATH.'shoutbox_lib.php' );
 
 $gBitSystem->verifyPackage( 'shoutbox' );
-$gBitSystem->verifyPermission( 'bit_p_view_shoutbox' );
+$gBitSystem->verifyPermission( 'p_shoutbox_view' );
 
 $feedback = NULL;
 $info = NULL;
@@ -31,7 +31,7 @@ if (isset($_REQUEST["remove"])) {
 	$gBitSmarty->assign('shoutbox_autolink',$shoutbox_autolink);
 }
 
-if (isset($_REQUEST["save"]) && ($gBitUser->hasPermission( 'bit_p_post_shoutbox' ))) {
+if (isset($_REQUEST["save"]) && ($gBitUser->hasPermission( 'p_shoutbox_post' ))) {
 	if( $shoutboxlib->store( $_REQUEST ) ) {
 		$feedback['success'] = tra( "Message saved" );
 		// reload the message

@@ -1,12 +1,12 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.3 2005/10/12 15:13:55 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.4 2006/04/11 13:08:55 squareing Exp $ *}
 
 {strip}
 
-{if $gBitSystem->isPackageActive( 'shoutbox' ) and $gBitUser->hasPermission( 'bit_p_view_shoutbox' )}
+{if $gBitSystem->isPackageActive( 'shoutbox' ) and $gBitUser->hasPermission( 'p_shoutbox_view' )}
 	{bitmodule title="$moduleTitle" name="shoutbox"}
 		{if $shoutFeedback}{formfeedback hash=$shoutFeedback}{/if}
 
-		{if $gBitUser->hasPermission( 'bit_p_post_shoutbox' )}
+		{if $gBitUser->hasPermission( 'p_shoutbox_post' )}
 			<form action="{$shout_ownurl}" method="post">
 				<div style="text-align:center">
 					<textarea rows="3" cols="20" name="shout_message"></textarea>

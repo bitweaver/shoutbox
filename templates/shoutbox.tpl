@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.5 2006/03/01 20:16:30 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.6 2006/04/11 13:08:55 squareing Exp $ *}
 {strip}
 
 <div class="display shoutbox">
@@ -36,7 +36,7 @@
 				{/form}
 			{/jstab}
 
-			{if $gBitUser->hasPermission( 'bit_p_admin_shoutbox' )}
+			{if $gBitUser->hasPermission( 'p_shoutbox_admin' )}
 				{jstab title="Shoutbox Settings"}
 					{form legend="Shoutbox Settings"}
 						<input type="hidden" name="tab" value="settings" />

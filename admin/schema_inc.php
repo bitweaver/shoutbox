@@ -33,9 +33,9 @@ $gBitInstaller->registerPreferences( SHOUTBOX_PKG_NAME, array(
 
 // ### Default UserPermissions
 $gBitInstaller->registerUserPermissions( SHOUTBOX_PKG_NAME, array(
-	array('bit_p_view_shoutbox', 'Can view shoutbox', 'basic', SHOUTBOX_PKG_NAME),
-	array('bit_p_admin_shoutbox', 'Can admin shoutbox (Edit/remove msgs)', 'editors', SHOUTBOX_PKG_NAME),
-	array('bit_p_post_shoutbox', 'Can post messages in shoutbox', 'basic', SHOUTBOX_PKG_NAME)
+	array('p_shoutbox_view', 'Can view shoutbox', 'basic', SHOUTBOX_PKG_NAME),
+	array('p_shoutbox_admin', 'Can admin shoutbox (Edit/remove msgs)', 'editors', SHOUTBOX_PKG_NAME),
+	array('p_shoutbox_post', 'Can post messages in shoutbox', 'basic', SHOUTBOX_PKG_NAME)
 ) );
 
 ?>
