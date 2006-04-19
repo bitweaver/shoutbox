@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.12 2006/04/11 13:08:55 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.13 2006/04/19 13:48:39 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.12 2006/04/11 13:08:55 squareing Exp $
+ * $Id: shoutbox_lib.php,v 1.13 2006/04/19 13:48:39 squareing Exp $
  * @package shoutbox
  */
 
@@ -148,7 +148,7 @@ class ShoutboxLib extends BitBase {
 					$mail_data = $gBitSmarty->fetch('bitpackage:shoutbox/shoutbox_send_notice.tpl');
 					$headers  = 'MIME-Version: 1.0' . "\r\n";
 					$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-					$headers .= "From: ".$gBitSystem->getConfig( 'sender_email' )."\r\n";
+					$headers .= "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\n";
 					mail($gToUser->mInfo['email'], tra('A new shoutbox message for you at'). ' ' . $_SERVER["SERVER_NAME"].' '.date( 'Y-m-d' ), $mail_data, $headers);
 				}
 			}
