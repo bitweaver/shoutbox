@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.4 2006/04/11 13:08:55 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.5 2006/04/19 15:32:48 spiderr Exp $ *}
 
 {strip}
 
@@ -22,7 +22,7 @@
 				<li class="{cycle values="even,odd"}">
 					{displayname hash=$shout_msgs[ix]}, {$shout_msgs[ix].shout_time|bit_short_datetime}: {$shout_msgs[ix].shout_message}
 					{if $shout_msgs[ix].is_editable}
-						&nbsp;<a href="{$smarty.const.SHOUTBOX_PKG_URL}index.php?shout_id={$shout_msgs[ix].shout_id}">{biticon ipackage=liberty iname="edit_small" iexplain="remove"}</a>
+						&nbsp;<a href="{$smarty.const.SHOUTBOX_PKG_URL}index.php?shout_id={$shout_msgs[ix].shout_id}">{biticon ipackage=liberty iname="edit_small" iexplain="edit"}</a>
 					{/if}
 
 					{if $shout_msgs[ix].is_deletable}
