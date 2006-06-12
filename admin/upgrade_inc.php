@@ -49,6 +49,11 @@ array( 'DATADICT' => array(
 		'tiki_shoutbox' => 'shoutbox',
 	)),
 )),
+array( 'ALTER' => array(
+	'shoutbox' => array(
+		'shout_ip' => array( '`shout_ip`', 'C(16)' ), // , 'NOTNULL' ),
+	),
+)),
 		)
 	),
 
