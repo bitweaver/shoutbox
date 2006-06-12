@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.15 2006/06/12 01:31:24 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.16 2006/06/12 01:44:58 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.15 2006/06/12 01:31:24 spiderr Exp $
+ * $Id: shoutbox_lib.php,v 1.16 2006/06/12 01:44:58 spiderr Exp $
  * @package shoutbox
  */
 
@@ -137,7 +137,6 @@ class ShoutboxLib extends BitBase {
 				$this->mDb->query($query,$bindvars);
 				$query = "INSERT INTO `".BIT_DB_PREFIX."shoutbox`( `shout_message`, `shout_user_id`, `to_user_id`, `shout_time`, `shout_sum`, `shout_ip`) VALUES (?,?,?,?,?,?)";
 				$bindvars = array( $pParamHash['shout_message'], $pParamHash['shout_user_id'], $pParamHash['to_user_id'], (int)$now, $shoutSum, $_SERVER['REMOTE_ADDR'] );
-vd( $bindvars );
 				if( $gBitSystem->isFeatureActive( 'shoutbox_email_notice' ) ) {
 					$gToUser = new BitPermUser( $pParamHash['to_user_id'] );
 					$gToUser->load();
