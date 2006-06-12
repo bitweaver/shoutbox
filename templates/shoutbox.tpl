@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.6 2006/04/11 13:08:55 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.7 2006/06/12 01:16:08 spiderr Exp $ *}
 {strip}
 
 <div class="display shoutbox">
@@ -76,7 +76,7 @@
 						&nbsp;&nbsp;{smartlink ititle="Edit" ibiticon="liberty/edit_small" offset=$offset shout_id=$channels[user].shout_id to_user_id=$toUserId}
 					{/if}
 					{if $channels[user].is_deletable}
-						&nbsp;{smartlink ititle="Remove" ibiticon="liberty/delete_small" offset=$offset shout_id=$channels[user].shout_id to_user_id=$toUserId}
+						&nbsp;{smartlink ititle="Remove" ibiticon="liberty/delete_small" offset=$offset remove=$channels[user].shout_id to_user_id=$toUserId}
 					{/if}
 					<br />
 					{$channels[user].shout_message}
