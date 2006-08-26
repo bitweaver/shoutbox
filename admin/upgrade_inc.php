@@ -51,7 +51,7 @@ array( 'DATADICT' => array(
 )),
 array( 'ALTER' => array(
 	'shoutbox' => array(
-		'shout_ip' => array( '`shout_ip`', 'C(16)' ), // , 'NOTNULL' ),
+		'shout_ip' => array( '`shout_ip` C(16)' ),
 	),
 )),
 		)
