@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.8 2006/06/12 01:31:24 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.9 2006/08/27 06:32:18 jht001 Exp $ *}
 {strip}
 
 <div class="display shoutbox">
@@ -9,32 +9,34 @@
 	{if $feedback}{formfeedback hash=$feedback}{/if}
 	<div class="body">
 		{jstabs}
-			{jstab title="Post or edit a message"}
-				{form legend="Post or edit a message"}
-					<input type="hidden" name="shout_id" value="{$shout.shout_id}" />
+			{if $gBitUser->hasPermission( 'p_shoutbox_admin' )}
+				{jstab title="Post or edit a message"}
+					{form legend="Post or edit a message"}
+						<input type="hidden" name="shout_id" value="{$shout.shout_id}" />
 
-					{if $shout.to_user_id and $shout.to_user_id ne 1}
+						{if $shout.to_user_id and $shout.to_user_id ne 1}
+							<div class="row">
+								{formlabel label="To"}
+								{forminput}
+									{displayname user_id=$shout.to_user_id}
+								{/forminput}
+							</div>
+						{/if}
+
 						<div class="row">
-							{formlabel label="To"}
+							{formlabel label="Message" for="message"}
 							{forminput}
-								{displayname user_id=$shout.to_user_id}
+								<textarea rows="4" cols="60" name="shout_message" id="message">{$shout.shout_message|escape:html}</textarea>
 							{/forminput}
 						</div>
-					{/if}
 
-					<div class="row">
-						{formlabel label="Message" for="message"}
-						{forminput}
-							<textarea rows="4" cols="60" name="shout_message" id="message">{$shout.shout_message|escape:html}</textarea>
-						{/forminput}
-					</div>
-
-					<div class="row submit">
-						<input type="submit" name="save" value="{tr}Post{/tr}" />
-						{if $shout_id}&nbsp;{smartlink ititle="Post new message"}{/if}
-					</div>
-				{/form}
-			{/jstab}
+						<div class="row submit">
+							<input type="submit" name="save" value="{tr}Post{/tr}" />
+							{if $shout_id}&nbsp;{smartlink ititle="Post new message"}{/if}
+						</div>
+					{/form}
+				{/jstab}
+			{/if}
 
 			{if $gBitUser->hasPermission( 'p_shoutbox_admin' )}
 				{jstab title="Shoutbox Settings"}
