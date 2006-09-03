@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.9 2006/08/27 06:32:18 jht001 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.10 2006/09/03 20:13:49 squareing Exp $ *}
 {strip}
 
 <div class="display shoutbox">
@@ -78,10 +78,10 @@
 					{/if}
 					{tr}To{/tr}: {displayname user_id=`$channels[user].to_user_id`} {tr}From{/tr}: {displayname hash=`$channels[user]`}, {$channels[user].shout_time|bit_long_datetime}
 					{if $channels[user].is_editable}
-						&nbsp;&nbsp;{smartlink ititle="Edit" ibiticon="liberty/edit_small" offset=$offset shout_id=$channels[user].shout_id to_user_id=$toUserId}
+						&nbsp;&nbsp;{smartlink ititle="Edit" ibiticon="icons/accessories-text-editor" offset=$offset shout_id=$channels[user].shout_id to_user_id=$toUserId}
 					{/if}
 					{if $channels[user].is_deletable}
-						&nbsp;{smartlink ititle="Remove" ibiticon="liberty/delete_small" offset=$offset remove=$channels[user].shout_id to_user_id=$toUserId}
+						&nbsp;{smartlink ititle="Remove" ibiticon="icons/edit-delete" offset=$offset remove=$channels[user].shout_id to_user_id=$toUserId}
 					{/if}
 					<br />
 					{$channels[user].shout_message}
