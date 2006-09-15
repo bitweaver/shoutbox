@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.7 2006/09/15 20:40:55 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.8 2006/09/15 21:07:42 spiderr Exp $ *}
 
 {strip}
 
@@ -8,10 +8,9 @@
 
 		{if $gBitUser->hasPermission( 'p_shoutbox_post' )}
 			<form action="{$shout_ownurl}" method="post">
-				{captcha}
 				<div style="text-align:center">
-					<textarea rows="3" cols="20" name="shout_message"></textarea>
-					<br />
+					<textarea rows="3" cols="20" name="shout_message"></textarea><br />
+					{captcha}
 					<input type="hidden" name="to_user_id" value="{$toUserId}" />
 					<input type="submit" name="shout_send" value="{tr}send{/tr}" />
 				</div>

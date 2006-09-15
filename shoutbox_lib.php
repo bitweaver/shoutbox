@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.16 2006/06/12 01:44:58 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.17 2006/09/15 21:07:42 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.16 2006/06/12 01:44:58 spiderr Exp $
+ * $Id: shoutbox_lib.php,v 1.17 2006/09/15 21:07:42 spiderr Exp $
  * @package shoutbox
  */
 
@@ -92,6 +92,7 @@ class ShoutboxLib extends BitBase {
 
 	function verify( &$pParamHash ) {
 		global $gBitUser;
+		
 		if( empty( $pParamHash['shout_user_id'] ) ) {
 			$pParamHash['shout_user_id'] = $gBitUser->getUserId();
 		}
@@ -100,13 +101,23 @@ class ShoutboxLib extends BitBase {
 		} elseif( !is_numeric( $pParamHash['to_user_id'] ) ) {
 			$this->mErrors['store'] = 'Invalid user';
 		}
+		if( !$gBitUser->hasPermission( 'p_users_bypass_captcha' ) ) {
+			if( empty( $pParamHash['captcha'] ) || $_SESSION['captcha']!=$pParamHash['captcha'] ) {
+				$this->mErrors['store'] = tra( 'Incorrect validation code' );
+			}
+		}
 		if( !empty( $pParamHash['shout_message'] ) ) {
-			$pParamHash['shout_message'] = substr( strip_tags( $pParamHash['shout_message'] ), 0, 255 );
+			$pParamHash['shout_message'] = trim( substr( strip_tags( $pParamHash['shout_message'] ), 0, 255 ) );
 			$shout_sum = md5($pParamHash['shout_message']);
 			$cant = $this->mDb->getOne("SELECT `shout_id` from `".BIT_DB_PREFIX."shoutbox` WHERE `shout_sum`=? AND `shout_user_id`=? AND `to_user_id`=?", array( $shout_sum, $pParamHash['shout_user_id'], $pParamHash['to_user_id'] ) );
 			if ($cant) {
 				$this->mErrors['store'] = tra( 'Duplicate message' );
+			} elseif( empty( $pParamHash['shout_message'] ) ) {
+				// check for empty after strip and trim.
+				$this->mErrors['store'] = tra( 'Empty message' );
 			}
+		} else {
+			$this->mErrors['store'] = tra( 'Empty message' );
 		}
 
 		if( !empty( $pParamHash['shout_id'] ) ) {
