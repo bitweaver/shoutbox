@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.9 2006/09/15 21:16:56 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.10 2006/09/15 21:27:35 spiderr Exp $ *}
 
 {strip}
 
@@ -12,7 +12,7 @@
 					<textarea rows="3" cols="20" name="shout_message"></textarea><br />
 					{captcha width=100 height=24}
 					<input type="hidden" name="to_user_id" value="{$toUserId}" />
-					<input type="submit" name="shout_send" value="{tr}send{/tr}" />
+					<input type="submit" name="shout_send" value="{tr}Shout!{/tr}" />
 				</div>
 			</form>
 		{/if}
