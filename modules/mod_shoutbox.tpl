@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.6 2006/09/03 20:13:48 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.7 2006/09/15 20:40:55 spiderr Exp $ *}
 
 {strip}
 
@@ -8,6 +8,7 @@
 
 		{if $gBitUser->hasPermission( 'p_shoutbox_post' )}
 			<form action="{$shout_ownurl}" method="post">
+				{captcha}
 				<div style="text-align:center">
 					<textarea rows="3" cols="20" name="shout_message"></textarea>
 					<br />
