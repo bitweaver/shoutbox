@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.17 2006/09/15 21:07:42 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.18 2006/09/16 09:52:00 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.17 2006/09/15 21:07:42 spiderr Exp $
+ * $Id: shoutbox_lib.php,v 1.18 2006/09/16 09:52:00 squareing Exp $
  * @package shoutbox
  */
 
@@ -92,20 +92,21 @@ class ShoutboxLib extends BitBase {
 
 	function verify( &$pParamHash ) {
 		global $gBitUser;
-		
+
 		if( empty( $pParamHash['shout_user_id'] ) ) {
 			$pParamHash['shout_user_id'] = $gBitUser->getUserId();
 		}
+
 		if( empty( $pParamHash['to_user_id'] ) ) {
 			$pParamHash['to_user_id'] = ROOT_USER_ID;
 		} elseif( !is_numeric( $pParamHash['to_user_id'] ) ) {
 			$this->mErrors['store'] = 'Invalid user';
 		}
-		if( !$gBitUser->hasPermission( 'p_users_bypass_captcha' ) ) {
-			if( empty( $pParamHash['captcha'] ) || $_SESSION['captcha']!=$pParamHash['captcha'] ) {
-				$this->mErrors['store'] = tra( 'Incorrect validation code' );
-			}
+
+		if( !$gBitUser->verifyCaptcha( !empty( $pParamHash['captcha'] ) ? $pParamHash['captcha'] : NULL ) ) {
+			$this->mErrors['store'] = tra( 'Incorrect validation code' );
 		}
+
 		if( !empty( $pParamHash['shout_message'] ) ) {
 			$pParamHash['shout_message'] = trim( substr( strip_tags( $pParamHash['shout_message'] ), 0, 255 ) );
 			$shout_sum = md5($pParamHash['shout_message']);
