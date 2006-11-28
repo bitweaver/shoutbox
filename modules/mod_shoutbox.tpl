@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.11 2006/09/16 09:52:00 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.12 2006/11/28 09:50:09 squareing Exp $ *}
 
 {strip}
 
@@ -20,7 +20,7 @@
 		<ul>
 			{section loop=$shout_msgs name=ix}
 				<li class="{cycle values="even,odd"}">
-					{displayname hash=$shout_msgs[ix]}, {$shout_msgs[ix].shout_time|bit_short_datetime}: {$shout_msgs[ix].shout_message}
+					{displayname hash=$shout_msgs[ix]}: {$shout_msgs[ix].shout_message} <small> - {$shout_msgs[ix].shout_time|bit_short_datetime}</small>
 					{if $shout_msgs[ix].is_editable}
 						&nbsp;<a href="{$smarty.const.SHOUTBOX_PKG_URL}index.php?shout_id={$shout_msgs[ix].shout_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="edit"}</a>
 					{/if}
@@ -33,9 +33,7 @@
 		</ul>
 
 		{if $shout_msgs}
-			<div style="text-align: center">
-				<a href="{$smarty.const.SHOUTBOX_PKG_URL}index.php?to_user_id={$toUserId}">{tr}Read More{/tr}&hellip;</a>
-			</div>
+			<a class="more" href="{$smarty.const.SHOUTBOX_PKG_URL}index.php?to_user_id={$toUserId}">{tr}Read More{/tr}&hellip;</a>
 		{/if}
 	{/bitmodule}
 {/if}
