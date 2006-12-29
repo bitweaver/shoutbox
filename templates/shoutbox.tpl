@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.10 2006/09/03 20:13:49 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.11 2006/12/29 14:12:17 squareing Exp $ *}
 {strip}
 
 <div class="display shoutbox">
@@ -73,16 +73,18 @@
 		<ul class="data">
 			{section name=user loop=$channels}
 				<li class="{cycle values="odd,even"} item">
+					<div class="floaticon">
+						{if $channels[user].is_editable}
+							&nbsp;&nbsp;{smartlink ititle="Edit" ibiticon="icons/accessories-text-editor" offset=$offset shout_id=$channels[user].shout_id to_user_id=$toUserId}
+						{/if}
+						{if $channels[user].is_deletable}
+							&nbsp;{smartlink ititle="Remove" ibiticon="icons/edit-delete" offset=$offset remove=$channels[user].shout_id to_user_id=$toUserId}
+						{/if}
+					</div>
 					{if $gBitUser->hasPermission('p_shoutbox_admin')}
-						<strong>{$channels[user].shout_ip}</strong>
+						<strong>{$channels[user].shout_ip}</strong> &bull;&nbsp;
 					{/if}
-					{tr}To{/tr}: {displayname user_id=`$channels[user].to_user_id`} {tr}From{/tr}: {displayname hash=`$channels[user]`}, {$channels[user].shout_time|bit_long_datetime}
-					{if $channels[user].is_editable}
-						&nbsp;&nbsp;{smartlink ititle="Edit" ibiticon="icons/accessories-text-editor" offset=$offset shout_id=$channels[user].shout_id to_user_id=$toUserId}
-					{/if}
-					{if $channels[user].is_deletable}
-						&nbsp;{smartlink ititle="Remove" ibiticon="icons/edit-delete" offset=$offset remove=$channels[user].shout_id to_user_id=$toUserId}
-					{/if}
+					{if $channels[user].to_user_id != 1}{tr}To{/tr}: {displayname user_id=`$channels[user].to_user_id`} {/if}{tr}From{/tr}: {displayname hash=`$channels[user]`}, <small>{$channels[user].shout_time|bit_long_datetime}</small>
 					<br />
 					{$channels[user].shout_message}
 				</li>
