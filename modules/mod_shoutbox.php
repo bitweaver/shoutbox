@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.5 2006/04/11 13:08:55 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.6 2007/01/01 10:00:33 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_shoutbox.php,v 1.5 2006/04/11 13:08:55 squareing Exp $
+ * $Id: mod_shoutbox.php,v 1.6 2007/01/01 10:00:33 squareing Exp $
  * @package shoutbox
  * @subpackage functions
  */
@@ -30,39 +30,29 @@ if( $gQueryUser && $gQueryUser->isRegistered() ) {
 $gBitSmarty->assign( 'toUserId', $shoutUserId );
 $shoutFeedback= NULL;
 
-if ($gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'p_shoutbox_view' )) {
-	$setup_parsed_uri = parse_url($_SERVER["REQUEST_URI"]);
+if( $gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'p_shoutbox_view' ) ) {
+	$parsedUrl = parse_url( $_SERVER["REQUEST_URI"] );
 
-	if (isset($setup_parsed_uri["query"])) {
-		parse_str($setup_parsed_uri["query"], $sht_query);
-	} else {
-		$sht_query = array();
+	if( isset( $parsedUrl["query"] ) ) {
+		parse_str( $parsedUrl["query"], $sht_query );
 	}
 
-	// I don't think httpPrefix is needed here (Luis)
-	$shout_father =/*httpPrefix().*/ $setup_parsed_uri["path"];
+	$shout_father = $parsedUrl["path"];
 
-	if (isset($sht_query) && count($sht_query) > 0) {
+	// recreate url parameters and append ? or &amp; that we can add parameters in the tpl
+	if( !empty( $sht_query ) ) {
 		$sht_first = 1;
-
-		foreach ($sht_query as $sht_name => $sht_val) {
-			if ($sht_first) {
-				$sht_first = false;
-
-				$shout_father .= '?' . $sht_name . '=' . $sht_val;
-			} else {
-				$shout_father .= '&amp;' . $sht_name . '=' . $sht_val;
-			}
+		foreach( $sht_query as $sht_name => $sht_val ) {
+			$shout_father .= ( ( $sht_first++ == 1 ) ? "?" : "&amp;" )."$sht_name=$sht_val";
 		}
-
 		$shout_father .= '&amp;';
 	} else {
 		$shout_father .= '?';
 	}
 
 	global $gBitSmarty;
-	$gBitSmarty->assign('shout_ownurl', $shout_father);
-	if (isset($_REQUEST["shout_remove"])) {
+	$gBitSmarty->assign( 'shout_ownurl', $shout_father );
+	if( isset( $_REQUEST["shout_remove"] ) ) {
 		if( $shoutboxlib->expunge( $_REQUEST["shout_remove"] ) ) {
 			$shoutFeedback['success'] = tra( "Message removed" );
 		} else {
@@ -70,8 +60,8 @@ if ($gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'p_s
 		}
 	}
 
-	if ($gBitUser->hasPermission( 'p_shoutbox_post' )) {
-		if (isset($_REQUEST["shout_send"])) {
+	if( $gBitUser->hasPermission( 'p_shoutbox_post' ) ) {
+		if( isset( $_REQUEST["shout_send"] ) ) {
 			if( $shoutboxlib->store( $_REQUEST ) ) {
 				$shoutFeedback['success'] = tra( "Message posted" );
 			} else {
@@ -79,10 +69,15 @@ if ($gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'p_s
 			}
 		}
 	}
-	$getList = array( 'max_records' => $module_rows, 'sort_mode' => 'shout_time_desc', 'to_user_id' => $shoutUserId );
+
+	$getList = array(
+		'max_records' => $module_rows,
+		'sort_mode' => 'shout_time_desc',
+		'to_user_id' => $shoutUserId
+	);
 	$shout_msgs = $shoutboxlib->getList( $getList );
-	$gBitSmarty->assign('shout_msgs', $shout_msgs["data"]);
-	$gBitSmarty->assign('shoutFeedback', $shoutFeedback);
+	$gBitSmarty->assign( 'shout_msgs', $shout_msgs["data"] );
+	$gBitSmarty->assign( 'shoutFeedback', $shoutFeedback );
 }
 
 ?>
