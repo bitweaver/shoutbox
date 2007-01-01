@@ -1,23 +1,15 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.20 2007/01/01 11:23:17 squareing Exp $
- *
- * Copyright (c) 2004 bitweaver.org
- * Copyright (c) 2003 tikwiki.org
- * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See copyright.txt for details and a complete list of authors.
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
- *
- * $Id: shoutbox_lib.php,v 1.20 2007/01/01 11:23:17 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.1 2007/01/01 11:32:41 squareing Exp $
  * @package shoutbox
  */
 
 /**
  * @package shoutbox
- * @subpackage ShoutBoxLib
+ * @subpackage Shoutbox
  */
-class ShoutboxLib extends BitBase {
-	function ShoutboxLib() {
+class Shoutbox extends BitBase {
+	function Shoutbox() {
 		BitBase::BitBase();
 	}
 
@@ -197,7 +189,7 @@ class ShoutboxLib extends BitBase {
 		return( count( $this->mErrors ) == 0 );
 	}
 
-	function get_shoutbox($pShoutId) {
+	function getShout($pShoutId) {
 		$query = "select * from `".BIT_DB_PREFIX."shoutbox` where `shout_id`=?";
 		$result = $this->mDb->query($query,array((int)$pShoutId));
 		if (!$result->numRows()) {
@@ -207,7 +199,4 @@ class ShoutboxLib extends BitBase {
 		return $res;
 	}
 }
-
-global $shoutboxlib;
-$shoutboxlib = new ShoutboxLib();
 ?>
