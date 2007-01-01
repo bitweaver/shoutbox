@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.18 2006/09/16 09:52:00 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.19 2007/01/01 10:45:12 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.18 2006/09/16 09:52:00 squareing Exp $
+ * $Id: shoutbox_lib.php,v 1.19 2007/01/01 10:45:12 squareing Exp $
  * @package shoutbox
  */
 
@@ -27,7 +27,7 @@ class ShoutboxLib extends BitBase {
 		if ( empty( $_REQUEST["sort_mode"] ) ) {
 			$pListHash['sort_mode'] = 'shout_time_desc';
 		}
-		$this->prepGetList( $pListHash );
+		LibertyContent::prepGetList( $pListHash );
 		$bindvars = array();
 		$mid = '';
 		if( !empty( $pListHash['find'] ) ) {
@@ -48,9 +48,7 @@ class ShoutboxLib extends BitBase {
 		}
 
 		$query = "SELECT * FROM `".BIT_DB_PREFIX."shoutbox` sh INNER JOIN `".BIT_DB_PREFIX."users_users` uus ON (sh.`shout_user_id`=uus.`user_id`) $mid order by ".$this->mDb->convert_sortmode( $pListHash['sort_mode'] );
-		$query_cant = "select count(*) from `".BIT_DB_PREFIX."shoutbox` $mid";
 		$result = $this->mDb->query($query,$bindvars,$pListHash['max_records'],$pListHash['offset']);
-		$cant = $this->mDb->getOne($query_cant,$bindvars);
 		$ret = array();
 
 		while ($res = $result->fetchRow()) {
@@ -84,10 +82,12 @@ class ShoutboxLib extends BitBase {
 
 			$ret[] = $res;
 		}
-		$retval = array();
-		$retval["data"] = $ret;
-		$retval["cant"] = $cant;
-		return $retval;
+
+		$query_cant = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."shoutbox` $mid";
+		$pListHash["cant"] = $this->mDb->getOne( $query_cant, $bindvars );
+
+		LibertyContent::postGetList( $pListHash );
+		return $ret;
 	}
 
 	function verify( &$pParamHash ) {
@@ -204,5 +204,4 @@ class ShoutboxLib extends BitBase {
 
 global $shoutboxlib;
 $shoutboxlib = new ShoutboxLib();
-
 ?>

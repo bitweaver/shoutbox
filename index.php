@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.7 2006/04/11 13:08:55 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.8 2007/01/01 10:45:12 squareing Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -15,77 +15,41 @@ $gBitSystem->verifyPackage( 'shoutbox' );
 $gBitSystem->verifyPermission( 'p_shoutbox_view' );
 
 $feedback = NULL;
-$info = NULL;
+$edit = NULL;
 
 // Permissioning is handled in the class, where it should be...
-if (isset($_REQUEST["remove"])) {
-	if( $shoutboxlib->expunge($_REQUEST["remove"]) ) {
+if( isset( $_REQUEST["remove"] )) {
+	if( $shoutboxlib->expunge( $_REQUEST["remove"] )) {
 		$feedback['success'] = tra( "Message removed" );
 	} else {
 		$feedback['error'] = $shoutboxlib->mErrors['expunge'];
 	}
-} elseif (isset($_REQUEST["shoutbox_admin"])) {
-	$shoutbox_autolink = (isset($_REQUEST["shoutbox_autolink"])) ? $_REQUEST["shoutbox_autolink"] : NULL;
+} elseif( isset( $_REQUEST["shoutbox_admin"] )) {
+	$shoutbox_autolink = ( isset( $_REQUEST["shoutbox_autolink"] )) ? $_REQUEST["shoutbox_autolink"] : NULL;
 	$gBitSystem->storeConfig( 'shoutbox_autolink', $shoutbox_autolink, SHOUTBOX_PKG_NAME );
 	$gBitSystem->storeConfig( 'shoutbox_email_notice', (isset($_REQUEST["shoutbox_email_notice"][0])) ? $_REQUEST["shoutbox_email_notice"][0] : NULL, SHOUTBOX_PKG_NAME );
 	$gBitSmarty->assign('shoutbox_autolink',$shoutbox_autolink);
 }
 
-if (isset($_REQUEST["save"]) && ($gBitUser->hasPermission( 'p_shoutbox_post' ))) {
+if( !empty( $_REQUEST["save"] ) && $gBitUser->hasPermission( 'p_shoutbox_post' ) ) {
 	if( $shoutboxlib->store( $_REQUEST ) ) {
 		$feedback['success'] = tra( "Message saved" );
-		// reload the message
 	} else {
-		$feedback['error'] = $shoutboxlib->mErrors['store'];
+		$feedback['error'] = $shoutboxlib->mErrors;
 	}
 }
 
 if( !empty( $_REQUEST["shout_id"] ) ) {
-	$info = $shoutboxlib->get_shoutbox($_REQUEST["shout_id"]);
-	if( !$shoutboxlib->verify( $_REQUEST ) ) {
-		$feedback['error'] = $shoutboxlib->mErrors['store'];
-	}
+	$edit = $shoutboxlib->get_shoutbox($_REQUEST["shout_id"]);
 	$gBitSmarty->assign( "shout_id", $_REQUEST["shout_id"] );
 }
 
-//$listHash = array( 'offset' => $offset, 'max_records' => $max_records, 'sort_mode' => $sort_mode, 'find' => $find );
-$channels = $shoutboxlib->getList( $_REQUEST );
-$gBitSmarty->assign_by_ref('offset', $_REQUEST['offset']);
-$gBitSmarty->assign('find', $_REQUEST['find']);
-
-$cant_pages = ceil($channels["cant"] / $max_records);
-$gBitSmarty->assign_by_ref('cant_pages', $cant_pages);
-$gBitSmarty->assign('actual_page', 1 + ( $_REQUEST['offset'] / $_REQUEST['max_records']));
-
-if($channels["cant"] > ( $_REQUEST['offset'] + $max_records)) {
-	$gBitSmarty->assign('next_offset',  $_REQUEST['offset'] + $_REQUEST['max_records']);
-} else {
-	$gBitSmarty->assign('next_offset', -1);
-}
-
-// If offset is > 0 then prev_offset
-if( !empty( $_REQUEST['offset'] ) ) {
-	$gBitSmarty->assign('prev_offset',  $_REQUEST['offset'] - $_REQUEST['max_records']);
-} else {
-	$gBitSmarty->assign('prev_offset', -1);
-}
-
-if( !empty( $_REQUEST['to_user_id'] ) ) {
-	$gBitSmarty->assign('toUserId', $_REQUEST['to_user_id'] );
-}
-
-$gBitSmarty->assign_by_ref('channels', $channels["data"]);
-
-$gBitSmarty->assign_by_ref( 'shout', $info );
-/*
-if(isset($_REQUEST['page'])) {
-	$page = &$_REQUEST['page'];
-	$offset = ($page - 1) * $_REQUEST['max_records'];
-}
-*/
-
-$gBitSmarty->assign('feedback', $feedback);
+$listHash = $_REQUEST;
+$channels = $shoutboxlib->getList( $listHash );
+$gBitSmarty->assign( 'channels', $channels );
+$gBitSmarty->assign( 'listInfo', $listHash['listInfo'] );
+$gBitSmarty->assign( 'shout', $edit );
+$gBitSmarty->assign( 'feedback', $feedback);
 // Display the template
 $gBitSystem->display( 'bitpackage:shoutbox/shoutbox.tpl', tra('Shoutbox') );
-
 ?>

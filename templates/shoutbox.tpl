@@ -1,60 +1,62 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.11 2006/12/29 14:12:17 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.12 2007/01/01 10:45:12 squareing Exp $ *}
 {strip}
+
+{capture name=shoutform}
+	{form legend="Post or edit a message"}
+		<input type="hidden" name="shout_id" value="{$shout.shout_id}" />
+
+		{if $shout.to_user_id and $shout.to_user_id ne 1}
+			<div class="row">
+				{formlabel label="To"}
+				{forminput}
+					{displayname user_id=$shout.to_user_id}
+				{/forminput}
+			</div>
+		{/if}
+
+		<div class="row">
+			{formlabel label="Message" for="message"}
+			{forminput}
+				<textarea rows="4" cols="60" name="shout_message" id="message">{$shout.shout_message|escape:html}</textarea>
+			{/forminput}
+		</div>
+
+		<div class="row submit">
+			<input type="submit" name="save" value="{tr}Post{/tr}" />
+			{if $shout_id}&nbsp;{smartlink ititle="Post new message"}{/if}
+		</div>
+	{/form}
+{/capture}
 
 <div class="display shoutbox">
 	<div class="header">
 		<h1>{tr}Shoutbox{/tr}</h1>
 	</div>
 
-	{if $feedback}{formfeedback hash=$feedback}{/if}
 	<div class="body">
-		{jstabs}
-			{if $gBitUser->hasPermission( 'p_shoutbox_admin' )}
+		{formfeedback hash=$feedback}
+		{if $gBitUser->hasPermission( 'p_shoutbox_admin' )}
+			{jstabs}
 				{jstab title="Post or edit a message"}
-					{form legend="Post or edit a message"}
-						<input type="hidden" name="shout_id" value="{$shout.shout_id}" />
-
-						{if $shout.to_user_id and $shout.to_user_id ne 1}
-							<div class="row">
-								{formlabel label="To"}
-								{forminput}
-									{displayname user_id=$shout.to_user_id}
-								{/forminput}
-							</div>
-						{/if}
-
-						<div class="row">
-							{formlabel label="Message" for="message"}
-							{forminput}
-								<textarea rows="4" cols="60" name="shout_message" id="message">{$shout.shout_message|escape:html}</textarea>
-							{/forminput}
-						</div>
-
-						<div class="row submit">
-							<input type="submit" name="save" value="{tr}Post{/tr}" />
-							{if $shout_id}&nbsp;{smartlink ititle="Post new message"}{/if}
-						</div>
-					{/form}
+					{$smarty.capture.shoutform}
 				{/jstab}
-			{/if}
 
-			{if $gBitUser->hasPermission( 'p_shoutbox_admin' )}
 				{jstab title="Shoutbox Settings"}
 					{form legend="Shoutbox Settings"}
 						<input type="hidden" name="tab" value="settings" />
 						<div class="row">
 							{formlabel label="Auto-link URLs" for="shoutbox_autolink"}
 							{forminput}
-								{html_radios name="shoutbox_autolink" values="m" checked=$shoutbox_autolink labels=false id="shoutbox_autolink"}{tr}URLs for this server only{/tr}<br/>
-								{html_radios name="shoutbox_autolink" values="y" checked=$shoutbox_autolink labels=false id="shoutbox_autolink"}{tr}URLs for any server on the internet{/tr}<br/>
-								{html_radios name="shoutbox_autolink" values="" checked=$shoutbox_autolink labels=false id="shoutbox_autolink"}{tr}None{/tr}<br/>
+								<label><input type="radio" name="shoutbox_autolink" value="m" {if $gBitSystem->getConfig('shoutbox_autolink') == 'm'}checked="checked"{/if} /> {tr}URLs for this server only{/tr}</label><br />
+								<label><input type="radio" name="shoutbox_autolink" value="y" {if $gBitSystem->getConfig('shoutbox_autolink') == 'y'}checked="checked"{/if} /> {tr}URLs for any server on the internet{/tr}</label><br />
+								<label><input type="radio" name="shoutbox_autolink" value=""  {if !$gBitSystem->isFeatureActive('shoutbox_autolink')}checked="checked"{/if} /> {tr}None{/tr}</label><br />
 								{formhelp note="This will convert any posted URL into an easily readable and clickable link"}
 							{/forminput}
 						</div>
 						<div class="row">
 							{formlabel label="Email Settings" for="shoutbox_autolink"}
 							{forminput}
-								{html_checkboxes name="shoutbox_email_notice" values="y" checked=$gBitSystem->getConfig('shoutbox_email_notice') labels=false id="shoutbox_autolink"}{tr}Auto-email Shouts{/tr}<br/>
+								<label><input type="checkbox" name="shoutbox_email_notice" value="y" {if $gBitSystem->isFeatureActive('shoutbox_email_notice')}checked="checked"{/if} /> {tr}Auto-email Shouts{/tr}</label><br />
 								{formhelp note="This will privately email any new shoutbox posts to the user being shouted."}
 								{formhelp page="Shoutbox"}
 							{/forminput}
@@ -65,8 +67,10 @@
 						</div>
 					{/form}
 				{/jstab}
-			{/if}
-		{/jstabs}
+			{/jstabs}
+		{elseif $gBitUser->hasPermission('p_shoutbox_post')}
+			{$smarty.capture.shoutform}
+		{/if}
 
 		{minifind}
 
@@ -75,10 +79,10 @@
 				<li class="{cycle values="odd,even"} item">
 					<div class="floaticon">
 						{if $channels[user].is_editable}
-							&nbsp;&nbsp;{smartlink ititle="Edit" ibiticon="icons/accessories-text-editor" offset=$offset shout_id=$channels[user].shout_id to_user_id=$toUserId}
+							&nbsp;&nbsp;{smartlink ititle="Edit" ibiticon="icons/accessories-text-editor" offset=$offset shout_id=$channels[user].shout_id to_user_id=$smarty.request.to_user_id}
 						{/if}
 						{if $channels[user].is_deletable}
-							&nbsp;{smartlink ititle="Remove" ibiticon="icons/edit-delete" offset=$offset remove=$channels[user].shout_id to_user_id=$toUserId}
+							&nbsp;{smartlink ititle="Remove" ibiticon="icons/edit-delete" offset=$offset remove=$channels[user].shout_id to_user_id=$smarty.request.to_user_id}
 						{/if}
 					</div>
 					{if $gBitUser->hasPermission('p_shoutbox_admin')}
@@ -91,7 +95,7 @@
 			{/section}
 		</ul>
 
-		{pagination}
+		{pagination to_user_id=$smarty.request.to_user_id}
 	</div><!-- end .body -->
 </div><!-- end .shoutbox -->
 
