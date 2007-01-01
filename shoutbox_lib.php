@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.19 2007/01/01 10:45:12 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Attic/shoutbox_lib.php,v 1.20 2007/01/01 11:23:17 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: shoutbox_lib.php,v 1.19 2007/01/01 10:45:12 squareing Exp $
+ * $Id: shoutbox_lib.php,v 1.20 2007/01/01 11:23:17 squareing Exp $
  * @package shoutbox
  */
 
@@ -149,19 +149,25 @@ class ShoutboxLib extends BitBase {
 				$this->mDb->query($query,$bindvars);
 				$query = "INSERT INTO `".BIT_DB_PREFIX."shoutbox`( `shout_message`, `shout_user_id`, `to_user_id`, `shout_time`, `shout_sum`, `shout_ip`) VALUES (?,?,?,?,?,?)";
 				$bindvars = array( $pParamHash['shout_message'], $pParamHash['shout_user_id'], $pParamHash['to_user_id'], (int)$now, $shoutSum, $_SERVER['REMOTE_ADDR'] );
-				if( $gBitSystem->isFeatureActive( 'shoutbox_email_notice' ) ) {
+
+				// inform the user user that a message has been posted
+				if( $pParamHash['to_user_id'] != ROOT_USER_ID && $pParamHash['to_user_id'] != ANONYMOUS_USER_ID && $gBitSystem->isFeatureActive( 'shoutbox_email_notice' ) ) {
 					$gToUser = new BitPermUser( $pParamHash['to_user_id'] );
 					$gToUser->load();
 					$gFromUser = new BitPermUser( $pParamHash['shout_user_id'] );
 					$gFromUser->load();
-					$gBitSmarty->assign( 'sendShoutUser', $gFromUser->getDisplayName( TRUE ) );
+					$gBitSmarty->assign( 'fromUser', $gFromUser->getDisplayName( TRUE ) );
 					$gBitSmarty->assign( 'sendShoutMessage', $pParamHash['shout_message'] );
-					$gBitSmarty->assign( 'sendShoutUri', $_SERVER['SCRIPT_URI'] );
-					$mail_data = $gBitSmarty->fetch('bitpackage:shoutbox/shoutbox_send_notice.tpl');
+					$mail_data = $gBitSmarty->fetch( 'bitpackage:shoutbox/shoutbox_send_notice.tpl' );
 					$headers  = 'MIME-Version: 1.0' . "\r\n";
 					$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 					$headers .= "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\n";
-					mail($gToUser->mInfo['email'], tra('A new shoutbox message for you at'). ' ' . $_SERVER["SERVER_NAME"].' '.date( 'Y-m-d' ), $mail_data, $headers);
+					mail(
+						$gToUser->mInfo['email'],
+						tra('A new shoutbox message for you at').' '.$_SERVER["SERVER_NAME"].' '.date( 'Y-m-d' ),
+						$mail_data,
+						$headers
+					);
 				}
 			}
 
