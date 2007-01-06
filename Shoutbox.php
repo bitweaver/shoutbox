@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.1 2007/01/01 11:32:41 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.2 2007/01/06 09:46:25 squareing Exp $
  * @package shoutbox
  */
 
@@ -39,7 +39,7 @@ class Shoutbox extends BitBase {
 			array_push( $bindvars, $pListHash['to_user_id'] );
 		}
 
-		$query = "SELECT * FROM `".BIT_DB_PREFIX."shoutbox` sh INNER JOIN `".BIT_DB_PREFIX."users_users` uus ON (sh.`shout_user_id`=uus.`user_id`) $mid order by ".$this->mDb->convert_sortmode( $pListHash['sort_mode'] );
+		$query = "SELECT * FROM `".BIT_DB_PREFIX."shoutbox` sh INNER JOIN `".BIT_DB_PREFIX."users_users` uus ON (sh.`shout_user_id`=uus.`user_id`) $mid order by ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
 		$result = $this->mDb->query($query,$bindvars,$pListHash['max_records'],$pListHash['offset']);
 		$ret = array();
 
