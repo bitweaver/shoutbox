@@ -48,11 +48,11 @@ array( 'DATADICT' => array(
 	array( 'RENAMETABLE' => array(
 		'tiki_shoutbox' => 'shoutbox',
 	)),
-)),
-array( 'ALTER' => array(
-	'shoutbox' => array(
-		'shout_ip' => array( '`shout_ip` C(16)' ),
-	),
+	array( 'ALTER' => array(
+		'shoutbox' => array(
+			'shout_ip' => array( '`shout_ip`', 'VARCHAR(16)' ),
+		),
+	)),
 )),
 		)
 	),
