@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.2 2007/01/06 09:46:25 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.3 2007/02/25 09:29:45 squareing Exp $
  * @package shoutbox
  */
 
@@ -39,7 +39,10 @@ class Shoutbox extends BitBase {
 			array_push( $bindvars, $pListHash['to_user_id'] );
 		}
 
-		$query = "SELECT * FROM `".BIT_DB_PREFIX."shoutbox` sh INNER JOIN `".BIT_DB_PREFIX."users_users` uus ON (sh.`shout_user_id`=uus.`user_id`) $mid order by ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
+		$query = "
+			SELECT * FROM `".BIT_DB_PREFIX."shoutbox` sh
+			INNER JOIN `".BIT_DB_PREFIX."users_users` uus ON (sh.`shout_user_id`=uus.`user_id`) $mid
+			ORDER BY ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
 		$result = $this->mDb->query($query,$bindvars,$pListHash['max_records'],$pListHash['offset']);
 		$ret = array();
 
@@ -100,10 +103,15 @@ class Shoutbox extends BitBase {
 		}
 
 		if( !empty( $pParamHash['shout_message'] ) ) {
-			$pParamHash['shout_message'] = trim( substr( strip_tags( $pParamHash['shout_message'] ), 0, 255 ) );
-			$shout_sum = md5($pParamHash['shout_message']);
-			$cant = $this->mDb->getOne("SELECT `shout_id` from `".BIT_DB_PREFIX."shoutbox` WHERE `shout_sum`=? AND `shout_user_id`=? AND `to_user_id`=?", array( $shout_sum, $pParamHash['shout_user_id'], $pParamHash['to_user_id'] ) );
-			if ($cant) {
+			$pParamHash['shout_message'] = trim( substr( strip_tags( $pParamHash['shout_message'] ), 0, 255 ));
+			$shout_sum = md5( $pParamHash['shout_message'] );
+			$cant = $this->mDb->getOne( "
+				SELECT `shout_id`
+				FROM `".BIT_DB_PREFIX."shoutbox`
+				WHERE `shout_sum`=? AND `shout_user_id`=? AND `to_user_id`=?",
+				array( $shout_sum, $pParamHash['shout_user_id'], $pParamHash['to_user_id'] )
+			);
+			if( $cant ) {
 				$this->mErrors['store'] = tra( 'Duplicate message' );
 			} elseif( empty( $pParamHash['shout_message'] ) ) {
 				// check for empty after strip and trim.
