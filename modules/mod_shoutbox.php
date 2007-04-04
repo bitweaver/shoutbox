@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.8 2007/01/01 11:32:42 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.9 2007/04/04 14:38:47 phoenixandy Exp $
  * @package shoutbox
  * @subpackage functions
  */
@@ -63,6 +63,9 @@ if( $gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'p_s
 			}
 		}
 	}
+	
+	// moduleParams contains lots of goodies: extract for easier handling
+	extract( $moduleParams );
 
 	$getList = array(
 		'max_records' => $module_rows,
