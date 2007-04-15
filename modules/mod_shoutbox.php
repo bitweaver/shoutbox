@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.9 2007/04/04 14:38:47 phoenixandy Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.10 2007/04/15 22:05:55 jht001 Exp $
  * @package shoutbox
  * @subpackage functions
  */
@@ -37,6 +37,12 @@ if( $gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'p_s
 	if( !empty( $sht_query ) ) {
 		$sht_first = 1;
 		foreach( $sht_query as $sht_name => $sht_val ) {
+			# We don't want to copy some values into father url
+			# It would be good to have a more general solution to decide which parameters
+			# should be copied into the father url
+			if ($sht_name == 'shout_remove') {
+				continue;
+				}
 			$shout_father .= ( ( $sht_first++ == 1 ) ? "?" : "&amp;" )."$sht_name=$sht_val";
 		}
 		$shout_father .= '&amp;';
