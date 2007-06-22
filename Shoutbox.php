@@ -1,12 +1,11 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.3 2007/02/25 09:29:45 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.4 2007/06/22 11:15:00 lsces Exp $
  * @package shoutbox
  */
 
 /**
  * @package shoutbox
- * @subpackage Shoutbox
  */
 class Shoutbox extends BitBase {
 	function Shoutbox() {
