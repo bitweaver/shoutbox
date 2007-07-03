@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.4 2007/06/22 11:15:00 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.5 2007/07/03 04:42:05 spiderr Exp $
  * @package shoutbox
  */
 
@@ -18,7 +18,7 @@ class Shoutbox extends BitBase {
 		if ( empty( $_REQUEST["sort_mode"] ) ) {
 			$pListHash['sort_mode'] = 'shout_time_desc';
 		}
-		LibertyContent::prepGetList( $pListHash );
+		LibertyBase::prepGetList( $pListHash );
 		$bindvars = array();
 		$mid = '';
 		if( !empty( $pListHash['find'] ) ) {
@@ -80,7 +80,7 @@ class Shoutbox extends BitBase {
 		$query_cant = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."shoutbox` $mid";
 		$pListHash["cant"] = $this->mDb->getOne( $query_cant, $bindvars );
 
-		LibertyContent::postGetList( $pListHash );
+		LibertyBase::postGetList( $pListHash );
 		return $ret;
 	}
 
