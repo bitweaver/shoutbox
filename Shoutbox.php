@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.6 2007/07/07 18:09:48 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.7 2007/07/07 18:29:59 squareing Exp $
  * @package shoutbox
  */
 
@@ -75,19 +75,24 @@ class Shoutbox extends BitBase {
 					// note that we've already done the htmlspecialchars thing
 					// things like :-)) need to preceed :-)
 					$smileys = array(
-						'--&gt;' => 'arrow',
-						':-O'    => 'eek',
-						'8-)'    => 'cool',
-						':-|'    => 'confused',
-						';-)'    => 'wink',
-						':-)))'  => 'lol',
-						':-))'   => 'biggrin',
-						':-)'    => 'smile',
-						':-P'    => 'razz',
-						'>:->'   => 'evil',
-						'>:-|'   => 'mad',
-						'(?)'    => 'question',
-						'(!)'    => 'exclaim',
+						'---&gt;' => 'arrow',
+						'--&gt;'  => 'arrow',
+						':-O'     => 'surprised',
+						'8-)'     => 'cool',
+						':-|'     => 'neutral',
+						':-/'     => 'confused',
+						':-\\'    => 'confused',
+						';-)'     => 'wink',
+						':-))))'  => 'mrgreen',
+						':-)))'   => 'lol',
+						':-))'    => 'biggrin',
+						':-)'     => 'smile',
+						':-P'     => 'razz',
+						'>:->'    => 'twisted',
+						'>:-('    => 'evil',
+						'>:-|'    => 'mad',
+						'(?)'     => 'question',
+						'(!)'     => 'exclaim',
 					);
 					foreach( $smileys as $str => $smiley ) {
 						$res['shout_message'] = str_replace( $str, "(:$smiley:)", $res['shout_message'] );
