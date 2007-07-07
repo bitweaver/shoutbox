@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.9 2007/01/01 11:32:41 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.10 2007/07/07 18:09:48 squareing Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -25,11 +25,12 @@ if( isset( $_REQUEST["remove"] )) {
 	} else {
 		$feedback['error'] = $gShout->mErrors['expunge'];
 	}
-} elseif( isset( $_REQUEST["shoutbox_admin"] )) {
-	$shoutbox_autolink = ( isset( $_REQUEST["shoutbox_autolink"] )) ? $_REQUEST["shoutbox_autolink"] : NULL;
-	$gBitSystem->storeConfig( 'shoutbox_autolink', $shoutbox_autolink, SHOUTBOX_PKG_NAME );
-	$gBitSystem->storeConfig( 'shoutbox_email_notice', (isset($_REQUEST["shoutbox_email_notice"][0])) ? $_REQUEST["shoutbox_email_notice"][0] : NULL, SHOUTBOX_PKG_NAME );
-	$gBitSmarty->assign('shoutbox_autolink',$shoutbox_autolink);
+} elseif( isset( $_REQUEST["shoutbox_admin"] ) && $gBitUser->isAdmin() ) {
+	$gBitSystem->storeConfig( 'shoutbox_autolink', ( isset( $_REQUEST["shoutbox_autolink"] )) ? $_REQUEST["shoutbox_autolink"] : NULL, SHOUTBOX_PKG_NAME );
+	$gBitSystem->storeConfig( 'shoutbox_email_notice', ( isset( $_REQUEST["shoutbox_email_notice"] )) ? 'y' : NULL, SHOUTBOX_PKG_NAME );
+	$gBitSystem->storeConfig( 'shoutbox_smileys', ( isset( $_REQUEST["shoutbox_smileys"] )) ? 'y' : NULL, SHOUTBOX_PKG_NAME );
+	// to be on the safe side, we will simply nuke the entire shoutbox cache
+	$gShout->mCache->expungeCache();
 }
 
 if( !empty( $_REQUEST["save"] ) && $gBitUser->hasPermission( 'p_shoutbox_post' ) ) {

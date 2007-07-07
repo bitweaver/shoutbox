@@ -1,20 +1,22 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.5 2007/07/03 04:42:05 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.6 2007/07/07 18:09:48 squareing Exp $
  * @package shoutbox
  */
 
+require_once( KERNEL_PKG_PATH.'BitCache.php' );
 /**
  * @package shoutbox
  */
 class Shoutbox extends BitBase {
 	function Shoutbox() {
 		BitBase::BitBase();
+		$this->mCache = new BitCache( 'shoutbox' );
 	}
 
 	// $offset, $max_records, $sort_mode, $find
 	function getList( &$pListHash ) {
-		global $gBitUser, $gBitSystem;
+		global $gBitUser, $gBitSystem, $gBitSmarty, $gLibertySystem;
 		if ( empty( $_REQUEST["sort_mode"] ) ) {
 			$pListHash['sort_mode'] = 'shout_time_desc';
 		}
@@ -42,37 +44,73 @@ class Shoutbox extends BitBase {
 			SELECT * FROM `".BIT_DB_PREFIX."shoutbox` sh
 			INNER JOIN `".BIT_DB_PREFIX."users_users` uus ON (sh.`shout_user_id`=uus.`user_id`) $mid
 			ORDER BY ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
-		$result = $this->mDb->query($query,$bindvars,$pListHash['max_records'],$pListHash['offset']);
+		$result = $this->mDb->query( $query, $bindvars, $pListHash['max_records'], $pListHash['offset'] );
 		$ret = array();
 
-		while ($res = $result->fetchRow()) {
-			if (!$res["shout_user_id"]) {
+		while( $res = $result->fetchRow() ) {
+			if( !$res["shout_user_id"] ) {
 				$res["shout_user_id"] = tra('Anonymous');
 			}
-			// convert ampersands and other stuff to xhtml compliant entities
-			$res["shout_message"] = htmlspecialchars($res["shout_message"]);
 
-			if( $gBitSystem->isFeatureActive( 'shoutbox_autolink' ) ) {
-				$hostname = '';
-				if( $gBitSystem->getConfig( 'shoutbox_autolink' ) == 'm' ) {
-					//moderated URL's
-					$hostname = $gBitSystem->getConfig( 'kernel_server_name' ) ? $gBitSystem->getConfig( 'kernel_server_name' ) : $_SERVER['HTTP_HOST'];
+			// get cached version if we have it
+			if( !$this->mCache->isCached( $res['shout_id'] )) {
+				// convert ampersands and other stuff to xhtml compliant entities
+				$res["shout_message"] = htmlspecialchars( $res["shout_message"] );
+
+				if( $gBitSystem->isFeatureActive( 'shoutbox_autolink' ) ) {
+					$hostname = '';
+					if( $gBitSystem->getConfig( 'shoutbox_autolink' ) == 'm' ) {
+						//moderated URL's
+						$hostname = $gBitSystem->getConfig( 'kernel_server_name' ) ? $gBitSystem->getConfig( 'kernel_server_name' ) : $_SERVER['HTTP_HOST'];
+					}
+					// we replace urls starting with http(s)|ftp(s) to active links
+					$res["shout_message"] = preg_replace("/((http|ftp)+(s)?:\/\/[^<>\s]*".$hostname."[^<>\s]*)/i", "<a href=\"\\0\">\\0</a>", $res["shout_message"]);
+					// we replace also urls starting with www. only to active links
+					$res["shout_message"] = preg_replace("/(?<!http|ftp)(?<!s)(?<!:\/\/)(www\.".$hostname."[^ )\s\r\n]*)/i","<a href=\"http://\\0\">\\0</a>",$res["shout_message"]);
+					// we replace also urls longer than 30 chars with translantable string as link description instead the URL itself to prevent breaking the layout in some browsers (e.g. Konqueror)
+					$res["shout_message"] = preg_replace("/(<a href=\")((http|ftp)+(s)?:\/\/[^\"]+)(\">)([^<]){30,}<\/a>/i", "<a href=\"\\2\">[".tra('Link')."]</a>", $res["shout_message"]);
 				}
-				// we replace urls starting with http(s)|ftp(s) to active links
-				$res["shout_message"] = preg_replace("/((http|ftp)+(s)?:\/\/[^<>\s]*".$hostname."[^<>\s]*)/i", "<a href=\"\\0\">\\0</a>", $res["shout_message"]);
-				// we replace also urls starting with www. only to active links
-				$res["shout_message"] = preg_replace("/(?<!http|ftp)(?<!s)(?<!:\/\/)(www\.".$hostname."[^ )\s\r\n]*)/i","<a href=\"http://\\0\">\\0</a>",$res["shout_message"]);
-				// we replace also urls longer than 30 chars with translantable string as link description instead the URL itself to prevent breaking the layout in some browsers (e.g. Konqueror)
-				$res["shout_message"] = preg_replace("/(<a href=\")((http|ftp)+(s)?:\/\/[^\"]+)(\">)([^<]){30,}<\/a>/i", "<a href=\"\\2\">[".tra('Link')."]</a>", $res["shout_message"]);
-			}
 
-			// if not in html tag (e.g. autolink), place after every '*;' the empty span too to prevent e.g. '&amp;&amp;...'
-			$res["shout_message"] = preg_replace('/(\s*)([^>]+)(<|$)/e', "'\\1'.str_replace(';', ';<span></span>','\\2').'\\3'", $res["shout_message"]);
-			// if not in tag or on a space or doesn't contain a html entity we split all plain text strings longer than 25 chars using the empty span tag again
-			$wrap_at = 25;
-			$res['is_editable'] = $gBitUser->isRegistered() && ($gBitUser->hasPermission( 'p_shoutbox_admin' ) || $gBitUser->getUserId() == $res['shout_user_id'] );
-			$res['is_deletable'] = $gBitUser->isRegistered() && ($gBitUser->hasPermission( 'p_shoutbox_admin' ) || $gBitUser->getUserId() == $res['shout_user_id'] || $gBitUser->getUserId() == $res['to_user_id'] );
-			$res["shout_message"] = preg_replace('/(\s*)([^\;>\s]{'.$wrap_at.',})([^&]<|$)/e', "'\\1'.wordwrap('\\2', '".$wrap_at."', '<span></span>', 1).'\\3'", $res["shout_message"]);
+				if( $gBitSystem->isFeatureActive( 'shoutbox_smileys' ) && $gBitSystem->isPackageActive( 'smileys' ) && $gLibertySystem->isPluginActive( 'filtersmileys' )) {
+					// note that we've already done the htmlspecialchars thing
+					// things like :-)) need to preceed :-)
+					$smileys = array(
+						'--&gt;' => 'arrow',
+						':-O'    => 'eek',
+						'8-)'    => 'cool',
+						':-|'    => 'confused',
+						';-)'    => 'wink',
+						':-)))'  => 'lol',
+						':-))'   => 'biggrin',
+						':-)'    => 'smile',
+						':-P'    => 'razz',
+						'>:->'   => 'evil',
+						'>:-|'   => 'mad',
+						'(?)'    => 'question',
+						'(!)'    => 'exclaim',
+					);
+					foreach( $smileys as $str => $smiley ) {
+						$res['shout_message'] = str_replace( $str, "(:$smiley:)", $res['shout_message'] );
+					}
+
+					if( $filterfunc = $gLibertySystem->getPluginFunction( 'filtersmileys', 'postfilter_function' )) {
+						$res['shout_message'] = $filterfunc( $res['shout_message'] );
+					}
+				}
+
+				// if not in html tag (e.g. autolink), place after every '*;' the empty span too to prevent e.g. '&amp;&amp;...'
+				$res["shout_message"] = preg_replace('/(\s*)([^>]+)(<|$)/e', "'\\1'.str_replace(';', ';<span></span>','\\2').'\\3'", $res["shout_message"]);
+				// if not in tag or on a space or doesn't contain a html entity we split all plain text strings longer than 25 chars using the empty span tag again
+				$wrap_at = 25;
+				$res["shout_message"] = preg_replace('/(\s*)([^\;>\s]{'.$wrap_at.',})([^&]<|$)/e', "'\\1'.wordwrap('\\2', '".$wrap_at."', '<span></span>', 1).'\\3'", $res["shout_message"]);
+
+				$this->mCache->writeCacheFile( $res['shout_id'], $res['shout_message'] );
+			}
+			$res['shout_message'] = $this->mCache->readCacheFile( $res['shout_id'] );
+
+			// work out permissions
+			$res['is_editable'] = $gBitUser->isRegistered() && ( $gBitUser->hasPermission( 'p_shoutbox_admin' ) || $gBitUser->getUserId() == $res['shout_user_id'] );
+			$res['is_deletable'] = $gBitUser->isRegistered() && ( $gBitUser->hasPermission( 'p_shoutbox_admin' ) || $gBitUser->getUserId() == $res['shout_user_id'] || $gBitUser->getUserId() == $res['to_user_id'] );
 
 			$ret[] = $res;
 		}
@@ -138,10 +176,11 @@ class Shoutbox extends BitBase {
 			$now = $gBitSystem->getUTCTime();
 			$shoutSum = md5( $pParamHash['shout_message'] );
 			if( !empty( $pParamHash['shout_id'] ) ) {
-				$userSql = '';
+				// since this is an update, we need to make sure the cache file is removed
+				$this->mCache->expungeCacheFile( $pParamHash['shout_id'] );
 				$bindvars = array( $pParamHash['shout_message'], $shoutSum, (int)$pParamHash['shout_id'] );
 				$query = "UPDATE `".BIT_DB_PREFIX."shoutbox` SET `shout_message`=?, `shout_sum`=?
-						  WHERE `shout_id`=? $userSql";
+						  WHERE `shout_id`=?";
 			} else {
 				$query = "DELETE FROM `".BIT_DB_PREFIX."shoutbox` where `shout_user_id`=? and `shout_time`=? and `shout_sum`=?";
 				$bindvars = array( $pParamHash['shout_user_id'], (int)$now, $shoutSum );

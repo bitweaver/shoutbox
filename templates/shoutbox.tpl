@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.12 2007/01/01 10:45:12 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.13 2007/07/07 18:09:48 squareing Exp $ *}
 {strip}
 
 {capture name=shoutform}
@@ -53,12 +53,22 @@
 								{formhelp note="This will convert any posted URL into an easily readable and clickable link"}
 							{/forminput}
 						</div>
+
+						{if $gBitSystem->isPackageActive( 'smileys' ) && $gLibertySystem->isPluginActive( 'filtersmileys' )}
+							<div class="row">
+								{formlabel label="Enable Smileys" for="shoutbox_smileys"}
+								{forminput}
+									<input type="checkbox" name="shoutbox_smileys" id="shoutbox_smileys" value="y" {if $gBitSystem->isFeatureActive('shoutbox_smileys')}checked="checked"{/if} />
+									{formhelp note="When a user inserts things like: <strong>;-)</strong> or <strong>:-)</strong> they will be replaced with appropriate smiley images."}
+								{/forminput}
+							</div>
+						{/if}
+
 						<div class="row">
-							{formlabel label="Email Settings" for="shoutbox_autolink"}
+							{formlabel label="Auto-email Shouts" for="shoutbox_email_notice"}
 							{forminput}
-								<label><input type="checkbox" name="shoutbox_email_notice" value="y" {if $gBitSystem->isFeatureActive('shoutbox_email_notice')}checked="checked"{/if} /> {tr}Auto-email Shouts{/tr}</label><br />
-								{formhelp note="This will privately email any new shoutbox posts to the user being shouted."}
-								{formhelp page="Shoutbox"}
+								<input type="checkbox" name="shoutbox_email_notice" id="shoutbox_email_notice" value="y" {if $gBitSystem->isFeatureActive('shoutbox_email_notice')}checked="checked"{/if} />
+								{formhelp note="This will privately email any new shoutbox posts to the user being shouted." page=Shoutbox}
 							{/forminput}
 						</div>
 
