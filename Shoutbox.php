@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.7 2007/07/07 18:29:59 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.8 2007/07/09 19:12:45 squareing Exp $
  * @package shoutbox
  */
 
@@ -82,6 +82,7 @@ class Shoutbox extends BitBase {
 						':-|'     => 'neutral',
 						':-/'     => 'confused',
 						':-\\'    => 'confused',
+						':-S'     => 'confused',
 						';-)'     => 'wink',
 						':-))))'  => 'mrgreen',
 						':-)))'   => 'lol',
