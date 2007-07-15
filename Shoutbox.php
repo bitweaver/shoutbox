@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.8 2007/07/09 19:12:45 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.9 2007/07/15 09:15:26 squareing Exp $
  * @package shoutbox
  */
 
@@ -53,7 +53,7 @@ class Shoutbox extends BitBase {
 			}
 
 			// get cached version if we have it
-			if( !$this->mCache->isCached( $res['shout_id'] )) {
+			if( !$this->mCache->isCached( $res['shout_id'], filemtime( __FILE__ ))) {
 				// convert ampersands and other stuff to xhtml compliant entities
 				$res["shout_message"] = htmlspecialchars( $res["shout_message"] );
 
