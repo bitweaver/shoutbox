@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.9 2007/07/15 09:15:26 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.10 2007/07/24 21:46:07 squareing Exp $
  * @package shoutbox
  */
 
@@ -72,35 +72,37 @@ class Shoutbox extends BitBase {
 				}
 
 				if( $gBitSystem->isFeatureActive( 'shoutbox_smileys' ) && $gBitSystem->isPackageActive( 'smileys' ) && $gLibertySystem->isPluginActive( 'filtersmileys' )) {
-					// note that we've already done the htmlspecialchars thing
-					// things like :-)) need to preceed :-)
-					$smileys = array(
-						'---&gt;' => 'arrow',
-						'--&gt;'  => 'arrow',
-						':-O'     => 'surprised',
-						'8-)'     => 'cool',
-						':-|'     => 'neutral',
-						':-/'     => 'confused',
-						':-\\'    => 'confused',
-						':-S'     => 'confused',
-						';-)'     => 'wink',
-						':-))))'  => 'mrgreen',
-						':-)))'   => 'lol',
-						':-))'    => 'biggrin',
-						':-)'     => 'smile',
-						':-P'     => 'razz',
-						'>:->'    => 'twisted',
-						'>:-('    => 'evil',
-						'>:-|'    => 'mad',
-						'(?)'     => 'question',
-						'(!)'     => 'exclaim',
-					);
-					foreach( $smileys as $str => $smiley ) {
-						$res['shout_message'] = str_replace( $str, "(:$smiley:)", $res['shout_message'] );
-					}
+					if( $filterfunc = $gLibertySystem->getPluginFunction( 'filtersmileys', 'postparse_function' )) {
+						// note that we've already done the htmlspecialchars thing
+						// things like :-)) need to preceed :-)
+						$smileys = array(
+							'---&gt;' => 'arrow',
+							'--&gt;'  => 'arrow',
+							':-O'     => 'surprised',
+							'8-)'     => 'cool',
+							':-|'     => 'neutral',
+							':-/'     => 'confused',
+							':-\\'    => 'confused',
+							':-S'     => 'confused',
+							';-)'     => 'wink',
+							':-))))'  => 'mrgreen',
+							':-)))'   => 'lol',
+							':-))'    => 'biggrin',
+							':-)'     => 'smile',
+							':-(('    => 'cry',
+							':-('     => 'sad',
+							':-P'     => 'razz',
+							'>:->'    => 'twisted',
+							'>:-('    => 'evil',
+							'>:-|'    => 'mad',
+							'(?)'     => 'question',
+							'(!)'     => 'exclaim',
+						);
+						foreach( $smileys as $str => $smiley ) {
+							$res['shout_message'] = str_replace( $str, "(:$smiley:)", $res['shout_message'] );
+						}
 
-					if( $filterfunc = $gLibertySystem->getPluginFunction( 'filtersmileys', 'postfilter_function' )) {
-						$res['shout_message'] = $filterfunc( $res['shout_message'] );
+						$filterfunc( $res['shout_message'], $res );
 					}
 				}
 
