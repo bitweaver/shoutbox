@@ -1,9 +1,9 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.12 2006/11/28 09:50:09 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.13 2007/09/27 11:22:55 squareing Exp $ *}
 
 {strip}
 
 {if $gBitSystem->isPackageActive( 'shoutbox' ) and $gBitUser->hasPermission( 'p_shoutbox_view' )}
-	{bitmodule title="$moduleTitle" name="shoutbox"}
+	{bitmodule title="$moduleTitle" name="shoutbox" notra=true}
 		{if $shoutFeedback}{formfeedback hash=$shoutFeedback}{/if}
 
 		{if $gBitUser->hasPermission( 'p_shoutbox_post' )}
