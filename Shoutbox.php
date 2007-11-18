@@ -1,9 +1,12 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.10 2007/07/24 21:46:07 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.11 2007/11/18 12:00:18 lsces Exp $
  * @package shoutbox
  */
 
+/**
+ * required setup
+ */
 require_once( KERNEL_PKG_PATH.'BitCache.php' );
 /**
  * @package shoutbox
