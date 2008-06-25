@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.10 2007/07/07 18:09:48 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_shoutbox/index.php,v 1.11 2008/06/25 22:21:23 spiderr Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -53,5 +53,5 @@ $gBitSmarty->assign( 'listInfo', $listHash['listInfo'] );
 $gBitSmarty->assign( 'shout', $edit );
 $gBitSmarty->assign( 'feedback', $feedback);
 // Display the template
-$gBitSystem->display( 'bitpackage:shoutbox/shoutbox.tpl', tra('Shoutbox') );
+$gBitSystem->display( 'bitpackage:shoutbox/shoutbox.tpl', tra('Shoutbox') , array( 'display_mode' => 'display' ));
 ?>
