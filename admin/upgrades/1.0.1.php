@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_shoutbox/admin/upgrades/1.0.1.php,v 1.1 2009/03/25 02:32:49 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_shoutbox/admin/upgrades/1.0.1.php,v 1.2 2009/03/25 08:28:11 squareing Exp $
  */
 global $gBitInstaller;
 
@@ -20,12 +20,9 @@ $gBitInstaller->registerPackageUpgrade( $infoHash, array(
 array( 'QUERY' =>
 	// postgres > 8.2 needs to have the type cast
 	array(
-		'PGSQL' => array(	"ALTER TABLE `".BIT_DB_PREFIX."shoutbox ALTER `shout_ip` TYPE VARCHAR(39)" ,
-		),
-		'OCI' => array(	"ALTER TABLE `".BIT_DB_PREFIX."shoutbox MODIFY (`shout_ip` TYPE VARCHAR2(39))" ,
-		),
-		'MYSQL' => array(	"ALTER TABLE `".BIT_DB_PREFIX."shoutbox MODIFY `shout_ip` TYPE VARCHAR(39)" ,
-		),
+		'PGSQL' => array( "ALTER TABLE `".BIT_DB_PREFIX."shoutbox` ALTER `shout_ip` TYPE VARCHAR(39)" ,),
+		'OCI'   => array( "ALTER TABLE `".BIT_DB_PREFIX."shoutbox` MODIFY (`shout_ip` TYPE VARCHAR2(39))" ,),
+		'MYSQL' => array( "ALTER TABLE `".BIT_DB_PREFIX."shoutbox` MODIFY `shout_ip` TYPE VARCHAR(39)" ,),
 	),
 ),
 
