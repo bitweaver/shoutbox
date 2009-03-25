@@ -7,7 +7,7 @@ $tables = array(
 		to_user_id I4 NOTNULL,
 		shout_message C(255) NOTNULL,
 		shout_time I8 NOTNULL,
-		shout_ip C(16),
+		shout_ip C(39),
 		shout_sum C(32)
 	"
 );
