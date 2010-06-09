@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.tpl,v 1.13 2007/09/27 11:22:55 squareing Exp $ *}
+{* $Header$ *}
 
 {strip}
 

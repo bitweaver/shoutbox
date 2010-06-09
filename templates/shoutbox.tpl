@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_shoutbox/templates/shoutbox.tpl,v 1.13 2007/07/07 18:09:48 squareing Exp $ *}
+{* $Header$ *}
 {strip}
 
 {capture name=shoutform}

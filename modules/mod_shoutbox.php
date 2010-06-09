@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/modules/mod_shoutbox.php,v 1.10 2007/04/15 22:05:55 jht001 Exp $
+ * $Header$
  * @package shoutbox
  * @subpackage functions
  */

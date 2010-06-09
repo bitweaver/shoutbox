@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_shoutbox/Shoutbox.php,v 1.11 2007/11/18 12:00:18 lsces Exp $
+ * $Header$
  * @package shoutbox
  */
 
