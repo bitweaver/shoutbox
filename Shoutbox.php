@@ -12,7 +12,7 @@ require_once( KERNEL_PKG_PATH.'BitCache.php' );
  * @package shoutbox
  */
 class Shoutbox extends BitBase {
-	function Shoutbox() {
+	function __construct() {
 		parent::__construct();
 		$this->mCache = new BitCache( 'shoutbox' );
 	}
