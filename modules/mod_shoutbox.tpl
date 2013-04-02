@@ -22,11 +22,11 @@
 				<li class="{cycle values="even,odd"}">
 					{displayname hash=$shout_msgs[ix]}: {$shout_msgs[ix].shout_message} <small> - {$shout_msgs[ix].shout_time|bit_short_datetime}</small>
 					{if $shout_msgs[ix].is_editable}
-						&nbsp;<a href="{$smarty.const.SHOUTBOX_PKG_URL}index.php?shout_id={$shout_msgs[ix].shout_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="edit"}</a>
+						&nbsp;<a href="{$smarty.const.SHOUTBOX_PKG_URL}index.php?shout_id={$shout_msgs[ix].shout_id}">{booticon iname="icon-edit" ipackage="icons" iexplain="edit"}</a>
 					{/if}
 
 					{if $shout_msgs[ix].is_deletable}
-						&nbsp;<a href="{$shout_ownurl}shout_remove={$shout_msgs[ix].shout_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove"}</a>
+						&nbsp;<a href="{$shout_ownurl}shout_remove={$shout_msgs[ix].shout_id}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove"}</a>
 					{/if}
 				</li>
 			{/section}
