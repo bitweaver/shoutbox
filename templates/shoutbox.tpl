@@ -89,10 +89,10 @@
 				<li class="{cycle values="odd,even"} item">
 					<div class="floaticon">
 						{if $channels[user].is_editable}
-							&nbsp;&nbsp;{smartlink ititle="Edit" ibiticon="icons/accessories-text-editor" offset=$offset shout_id=$channels[user].shout_id to_user_id=$smarty.request.to_user_id}
+							&nbsp;&nbsp;{smartlink ititle="Edit" booticon="icon-edit" offset=$offset shout_id=$channels[user].shout_id to_user_id=$smarty.request.to_user_id}
 						{/if}
 						{if $channels[user].is_deletable}
-							&nbsp;{smartlink ititle="Remove" ibiticon="icons/edit-delete" offset=$offset remove=$channels[user].shout_id to_user_id=$smarty.request.to_user_id}
+							&nbsp;{smartlink ititle="Remove" booticon="icon-trash" offset=$offset remove=$channels[user].shout_id to_user_id=$smarty.request.to_user_id}
 						{/if}
 					</div>
 					{if $gBitUser->hasPermission('p_shoutbox_admin')}
