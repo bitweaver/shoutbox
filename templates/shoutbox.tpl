@@ -98,7 +98,7 @@
 					{if $gBitUser->hasPermission('p_shoutbox_admin')}
 						<strong>{$channels[user].shout_ip}</strong> &bull;&nbsp;
 					{/if}
-					{if $channels[user].to_user_id != 1}{tr}To{/tr}: {displayname user_id=`$channels[user].to_user_id`} {/if}{tr}From{/tr}: {displayname hash=`$channels[user]`}, <small>{$channels[user].shout_time|bit_long_datetime}</small>
+					{if $channels[user].to_user_id != 1}{tr}To{/tr}: {displayname user_id=$channels[user].to_user_id} {/if}{tr}From{/tr}: {displayname hash=$channels[user]}, <small>{$channels[user].shout_time|bit_long_datetime}</small>
 					<br />
 					{$channels[user].shout_message}
 				</li>
