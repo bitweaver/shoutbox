@@ -15,13 +15,13 @@ $gShout = new Shoutbox();
 $gBitUser->hasPermission( 'p_shoutbox_view' );
 if( $gQueryUser && $gQueryUser->isRegistered() ) {
 	$shoutUserId = $gQueryUser->mUserId;
-	$gBitSmarty->assign( 'moduleTitle', $gQueryUser->getDisplayName().'\'s '.tra( 'shoutbox' ) );
+	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( $gQueryUser->getDisplayName();
 } else {
-	$gBitSmarty->assign( 'moduleTitle', tra( 'Shoutbox' ) );
+	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( tra( 'Shoutbox' );
 	$shoutUserId = ROOT_USER_ID;
 }
 
-$gBitSmarty->assign( 'toUserId', $shoutUserId );
+$_template->tpl_vars['toUserId'] = new Smarty_variable( $shoutUserId );
 $shoutFeedback= NULL;
 
 if( $gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'p_shoutbox_view' ) ) {
@@ -51,7 +51,7 @@ if( $gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'p_s
 	}
 
 	global $gBitSmarty;
-	$gBitSmarty->assign( 'shout_ownurl', $shout_father );
+	$_template->tpl_vars['shout_ownurl'] = new Smarty_variable( $shout_father );
 	if( isset( $_REQUEST["shout_remove"] ) ) {
 		if( $gShout->expunge( $_REQUEST["shout_remove"] ) ) {
 			$shoutFeedback['success'] = tra( "Message removed" );
@@ -79,8 +79,8 @@ if( $gBitSystem->isPackageActive( 'shoutbox' ) && $gBitUser->hasPermission( 'p_s
 		'to_user_id' => $shoutUserId
 	);
 	$shout_msgs = $gShout->getList( $getList );
-	$gBitSmarty->assign( 'shout_msgs', $shout_msgs );
-	$gBitSmarty->assign( 'shoutFeedback', $shoutFeedback );
+	$_template->tpl_vars['shout_msgs'] = new Smarty_variable( $shout_msgs );
+	$_template->tpl_vars['shoutFeedback'] = new Smarty_variable( $shoutFeedback );
 }
 
 ?>
