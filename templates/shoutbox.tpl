@@ -56,20 +56,18 @@
 
 						{if $gBitSystem->isPackageActive( 'smileys' ) && $gLibertySystem->isPluginActive( 'filtersmileys' )}
 							<div class="control-group">
-								{formlabel label="Enable Smileys" for="shoutbox_smileys"}
-								{forminput}
-									<input type="checkbox" name="shoutbox_smileys" id="shoutbox_smileys" value="y" {if $gBitSystem->isFeatureActive('shoutbox_smileys')}checked="checked"{/if} />
+								<label class="checkbox">
+									<input type="checkbox" name="shoutbox_smileys" id="shoutbox_smileys" value="y" {if $gBitSystem->isFeatureActive('shoutbox_smileys')}checked="checked"{/if} />Enable Smileys
 									{formhelp note="When a user inserts things like: <strong>;-)</strong> or <strong>:-)</strong> they will be replaced with appropriate smiley images."}
-								{/forminput}
+								</label>
 							</div>
 						{/if}
 
 						<div class="control-group">
-							{formlabel label="Auto-email Shouts" for="shoutbox_email_notice"}
-							{forminput}
-								<input type="checkbox" name="shoutbox_email_notice" id="shoutbox_email_notice" value="y" {if $gBitSystem->isFeatureActive('shoutbox_email_notice')}checked="checked"{/if} />
+							<label class="checkbox">
+								<input type="checkbox" name="shoutbox_email_notice" id="shoutbox_email_notice" value="y" {if $gBitSystem->isFeatureActive('shoutbox_email_notice')}checked="checked"{/if} />Auto-email Shouts
 								{formhelp note="This will privately email any new shoutbox posts to the user being shouted." page=Shoutbox}
-							{/forminput}
+							</label>
 						</div>
 
 						<div class="control-group submit">
