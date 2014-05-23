@@ -22,7 +22,7 @@
 		</div>
 
 		<div class="control-group submit">
-			<input type="submit" class="btn" name="save" value="{tr}Post{/tr}" />
+			<input type="submit" class="btn btn-default" name="save" value="{tr}Post{/tr}" />
 			{if $shout_id}&nbsp;{smartlink ititle="Post new message"}{/if}
 		</div>
 	{/form}
