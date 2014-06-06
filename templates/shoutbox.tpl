@@ -6,7 +6,7 @@
 		<input type="hidden" name="shout_id" value="{$shout.shout_id}" />
 
 		{if $shout.to_user_id and $shout.to_user_id ne 1}
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="To"}
 				{forminput}
 					{displayname user_id=$shout.to_user_id}
@@ -14,14 +14,14 @@
 			</div>
 		{/if}
 
-		<div class="control-group">
+		<div class="form-group">
 			{formlabel label="Message" for="message"}
 			{forminput}
 				<textarea rows="4" cols="60" name="shout_message" id="message">{$shout.shout_message|escape:html}</textarea>
 			{/forminput}
 		</div>
 
-		<div class="control-group submit">
+		<div class="form-group submit">
 			<input type="submit" class="btn btn-default" name="save" value="{tr}Post{/tr}" />
 			{if $shout_id}&nbsp;{smartlink ititle="Post new message"}{/if}
 		</div>
@@ -44,7 +44,7 @@
 				{jstab title="Shoutbox Settings"}
 					{form legend="Shoutbox Settings"}
 						<input type="hidden" name="tab" value="settings" />
-						<div class="control-group">
+						<div class="form-group">
 							{formlabel label="Auto-link URLs" for="shoutbox_autolink"}
 							{forminput}
 								<label><input type="radio" name="shoutbox_autolink" value="m" {if $gBitSystem->getConfig('shoutbox_autolink') == 'm'}checked="checked"{/if} /> {tr}URLs for this server only{/tr}</label><br />
@@ -55,7 +55,7 @@
 						</div>
 
 						{if $gBitSystem->isPackageActive( 'smileys' ) && $gLibertySystem->isPluginActive( 'filtersmileys' )}
-							<div class="control-group">
+							<div class="form-group">
 								<label class="checkbox">
 									<input type="checkbox" name="shoutbox_smileys" id="shoutbox_smileys" value="y" {if $gBitSystem->isFeatureActive('shoutbox_smileys')}checked="checked"{/if} />Enable Smileys
 									{formhelp note="When a user inserts things like: <strong>;-)</strong> or <strong>:-)</strong> they will be replaced with appropriate smiley images."}
@@ -63,14 +63,14 @@
 							</div>
 						{/if}
 
-						<div class="control-group">
+						<div class="form-group">
 							<label class="checkbox">
 								<input type="checkbox" name="shoutbox_email_notice" id="shoutbox_email_notice" value="y" {if $gBitSystem->isFeatureActive('shoutbox_email_notice')}checked="checked"{/if} />Auto-email Shouts
 								{formhelp note="This will privately email any new shoutbox posts to the user being shouted." page=Shoutbox}
 							</label>
 						</div>
 
-						<div class="control-group submit">
+						<div class="form-group submit">
 							<input name="shoutbox_admin" type="submit" value="{tr}Submit{/tr}" />
 						</div>
 					{/form}
