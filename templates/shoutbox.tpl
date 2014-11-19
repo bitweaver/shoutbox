@@ -46,28 +46,28 @@
 						<input type="hidden" name="tab" value="settings" />
 						<div class="form-group">
 							{formlabel label="Auto-link URLs" for="shoutbox_autolink"}
-							{forminput}
-								<label><input type="radio" name="shoutbox_autolink" value="m" {if $gBitSystem->getConfig('shoutbox_autolink') == 'm'}checked="checked"{/if} /> {tr}URLs for this server only{/tr}</label><br />
-								<label><input type="radio" name="shoutbox_autolink" value="y" {if $gBitSystem->getConfig('shoutbox_autolink') == 'y'}checked="checked"{/if} /> {tr}URLs for any server on the internet{/tr}</label><br />
-								<label><input type="radio" name="shoutbox_autolink" value=""  {if !$gBitSystem->isFeatureActive('shoutbox_autolink')}checked="checked"{/if} /> {tr}None{/tr}</label><br />
+							{forminput class="radio"}
+								<input type="radio" name="shoutbox_autolink" value="m" {if $gBitSystem->getConfig('shoutbox_autolink') == 'm'}checked="checked"{/if} /> {tr}URLs for this server only{/tr}<br />
+								<input type="radio" name="shoutbox_autolink" value="y" {if $gBitSystem->getConfig('shoutbox_autolink') == 'y'}checked="checked"{/if} /> {tr}URLs for any server on the internet{/tr}<br />
+								<input type="radio" name="shoutbox_autolink" value=""  {if !$gBitSystem->isFeatureActive('shoutbox_autolink')}checked="checked"{/if} /> {tr}None{/tr}
 								{formhelp note="This will convert any posted URL into an easily readable and clickable link"}
 							{/forminput}
 						</div>
 
 						{if $gBitSystem->isPackageActive( 'smileys' ) && $gLibertySystem->isPluginActive( 'filtersmileys' )}
 							<div class="form-group">
-								<label class="checkbox">
-									<input type="checkbox" name="shoutbox_smileys" id="shoutbox_smileys" value="y" {if $gBitSystem->isFeatureActive('shoutbox_smileys')}checked="checked"{/if} />Enable Smileys
+								{forminput label="checkbox"}
+									<input type="checkbox" name="shoutbox_smileys" id="shoutbox_smileys" value="y" {if $gBitSystem->isFeatureActive('shoutbox_smileys')}checked="checked"{/if} /> {tr}Enable Smileys{/tr}
 									{formhelp note="When a user inserts things like: <strong>;-)</strong> or <strong>:-)</strong> they will be replaced with appropriate smiley images."}
-								</label>
+								{/forminput}
 							</div>
 						{/if}
 
 						<div class="form-group">
-							<label class="checkbox">
-								<input type="checkbox" name="shoutbox_email_notice" id="shoutbox_email_notice" value="y" {if $gBitSystem->isFeatureActive('shoutbox_email_notice')}checked="checked"{/if} />Auto-email Shouts
+							{forminput label="checkbox"}
+								<input type="checkbox" name="shoutbox_email_notice" id="shoutbox_email_notice" value="y" {if $gBitSystem->isFeatureActive('shoutbox_email_notice')}checked="checked"{/if} /> {tr}Auto-email Shouts{/tr}
 								{formhelp note="This will privately email any new shoutbox posts to the user being shouted." page=Shoutbox}
-							</label>
+							{/forminput}
 						</div>
 
 						<div class="form-group submit">
