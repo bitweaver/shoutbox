@@ -110,10 +110,14 @@ class Shoutbox extends BitBase {
 				}
 
 				// if not in html tag (e.g. autolink), place after every '*;' the empty span too to prevent e.g. '&amp;&amp;...'
-				$res["shout_message"] = preg_replace('/(\s*)([^>]+)(<|$)/e', "'\\1'.str_replace(';', ';<span></span>','\\2').'\\3'", $res["shout_message"]);
+				$res["shout_message"] = preg_replace_callback( '/(\s*)([^>]+)(<|$)/', 
+					function ($m) { return  $m[1].str_replace(';', ';<span></span>',$m[2]).$m[3]; },
+					$res["shout_message"] );
 				// if not in tag or on a space or doesn't contain a html entity we split all plain text strings longer than 25 chars using the empty span tag again
 				$wrap_at = 25;
-				$res["shout_message"] = preg_replace('/(\s*)([^\;>\s]{'.$wrap_at.',})([^&]<|$)/e', "'\\1'.wordwrap('\\2', '".$wrap_at."', '<span></span>', 1).'\\3'", $res["shout_message"]);
+				$res["shout_message"] = preg_replace_callback( '/(\s*)([^\;>\s]{'.$wrap_at.',})([^&]<|$)/', 
+					function ($m) { return $m[1].wordwrap($m[2], '".$wrap_at."', '<span></span>', 1).$m[3]; },
+					$res["shout_message"] );
 
 				$this->mCache->writeCacheFile( $res['shout_id'], $res['shout_message'] );
 			}
