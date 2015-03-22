@@ -15,9 +15,9 @@ $gShout = new Shoutbox();
 $gBitUser->hasPermission( 'p_shoutbox_view' );
 if( $gQueryUser && $gQueryUser->isRegistered() ) {
 	$shoutUserId = $gQueryUser->mUserId;
-	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( $gQueryUser->getDisplayName();
+	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( $gQueryUser->getDisplayName());
 } else {
-	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( tra( 'Shoutbox' );
+	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( tra( 'Shoutbox' ));
 	$shoutUserId = ROOT_USER_ID;
 }
 
